@@ -1,6 +1,5 @@
 <template>
   <div>
-    <span>landing-item</span>
     <HappyPreview :configList="configList" />
   </div>
 </template>
@@ -17,6 +16,9 @@ export default defineComponent({
     const configList = ref([
       {
         name: "a-button",
+      },
+      {
+        name: "a-image",
       },
     ]);
     return {

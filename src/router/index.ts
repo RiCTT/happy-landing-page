@@ -17,6 +17,11 @@ const routes: Array<RouteRecordRaw> = [
     name: "LandingItem",
     component: () => import("@/page/landing-item/index.vue"),
   },
+  {
+    path: "/page-preview",
+    name: "PagePreview",
+    component: () => import("@/page/page-preview/index.vue"),
+  },
 ];
 
 const router = createRouter({

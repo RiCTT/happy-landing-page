@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="route.name !== 'PagePreview'">
     <LayoutHeader />
   </div>
   <router-view />
@@ -7,10 +7,16 @@
 
 <script lang="ts">
 import LayoutHeader from "@/components/layout-header/index.vue";
-
+import { useRoute } from "vue-router";
 export default {
   components: {
     LayoutHeader,
+  },
+  setup() {
+    const route = useRoute();
+    return {
+      route,
+    };
   },
 };
 </script>
