@@ -12,6 +12,11 @@ const routes: Array<RouteRecordRaw> = [
     name: "LandingList",
     component: () => import("@/page/landing-list/index.vue"),
   },
+  {
+    path: "/landing-item",
+    name: "LandingItem",
+    component: () => import("@/page/landing-item/index.vue"),
+  },
 ];
 
 const router = createRouter({

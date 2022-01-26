@@ -1,5 +1,6 @@
 import { reactive, toRefs, ref } from "vue";
 import { DownOutlined } from "@ant-design/icons-vue";
+import { useRouter } from "vue-router";
 
 export const useTable = () => {
   const columns = ref([
@@ -55,9 +56,20 @@ export const useTable = () => {
             );
           },
         };
+
+        const gotoLandingItemPage = () => {
+          router.push({
+            name: "LandingItem",
+            query: {
+              ID: record.ID,
+            },
+          });
+        };
         return (
           <div>
-            <a-button type="link">编辑</a-button>
+            <a-button type="link" onClick={gotoLandingItemPage}>
+              编辑
+            </a-button>
             <a-dropdown trigger={["click"]} v-slots={slots}>
               <a class="ant-dropdown-link">
                 更多
@@ -69,6 +81,8 @@ export const useTable = () => {
       },
     },
   ]);
+
+  const router = useRouter();
 
   const data = ref();
 

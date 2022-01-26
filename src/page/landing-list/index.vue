@@ -39,7 +39,7 @@ export default defineComponent({
       setTimeout(() => {
         const len = Math.round(Math.random() * 10);
         const total = Math.round(Math.random() * 120);
-        const data: any = [];
+        const data: any[] = [];
         for (let i = 0; i < len; i++) {
           data.push({
             key: i + 1 + "S",
