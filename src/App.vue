@@ -1,17 +1,29 @@
 <template>
-  <div id="nav">
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
+  <div>
+    <LayoutHeader />
   </div>
   <router-view />
 </template>
 
+<script lang="ts">
+import LayoutHeader from "@/components/layout-header/index.vue";
+
+export default {
+  components: {
+    LayoutHeader,
+  },
+};
+</script>
+
 <style lang="stylus">
-#app
+body {
+  background-color: #f6f6f6 !important;
+}
+#app {
   font-family Avenir, Helvetica, Arial, sans-serif
   -webkit-font-smoothing antialiased
   -moz-osx-font-smoothing grayscale
   text-align center
   color #2c3e50
-  margin-top 60px
+}
 </style>
