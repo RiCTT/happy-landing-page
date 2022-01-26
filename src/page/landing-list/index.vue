@@ -43,8 +43,13 @@ export default defineComponent({
         for (let i = 0; i < len; i++) {
           data.push({
             key: i + 1 + "S",
+            ID: Math.random().toString(),
+            visitor: Math.round(Math.random() * 100000),
             name: "胡彦斌" + i + "号",
+            time: Math.round(Math.random() * 100),
+            updateTime: new Date().toLocaleDateString(),
             age: i + Math.random() * 10,
+            status: Math.random() > 0.5 ? "pink" : "blue",
             address: "西湖区湖底公园1号" + i,
           });
         }

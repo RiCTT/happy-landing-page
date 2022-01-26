@@ -1,24 +1,71 @@
 import { reactive, toRefs, ref } from "vue";
+import { DownOutlined } from "@ant-design/icons-vue";
 
 export const useTable = () => {
   const columns = ref([
     {
-      title: "姓名",
+      title: "落地页名称",
       dataIndex: "name",
       key: "name",
     },
     {
-      title: "年龄",
-      dataIndex: "age",
-      key: "age",
+      title: "落地页ID",
+      dataIndex: "ID",
     },
     {
-      title: "住址",
-      dataIndex: "address",
-      key: "address",
+      title: "访问量",
+      dataIndex: "visitor",
+      sorter: (a, b) => a.visitor - b.visitor,
+      sortDirections: ["descend"],
+    },
+    {
+      title: "平均访问时长",
+      dataIndex: "time",
+    },
+    {
+      title: "最后更新时间",
+      dataIndex: "updateTime",
+    },
+    {
+      title: "状态",
+      dataIndex: "status",
       customRender: ({ record }) => {
-        const { address } = record;
-        return <div>{address}</div>;
+        const { status } = record;
+        return <a-tag color={status || "pink"}>{status}</a-tag>;
+      },
+    },
+    {
+      title: "操作",
+      dataIndex: "operation",
+      customRender: ({ record }) => {
+        const slots = {
+          overlay: () => {
+            return (
+              <a-menu>
+                <div>
+                  <a-button type="link">预览</a-button>
+                </div>
+                <div>
+                  <a-button type="link">删除</a-button>
+                </div>
+                <div>
+                  <a-button type="link">下架</a-button>
+                </div>
+              </a-menu>
+            );
+          },
+        };
+        return (
+          <div>
+            <a-button type="link">编辑</a-button>
+            <a-dropdown trigger={["click"]} v-slots={slots}>
+              <a class="ant-dropdown-link">
+                更多
+                <DownOutlined />
+              </a>
+            </a-dropdown>
+          </div>
+        );
       },
     },
   ]);
