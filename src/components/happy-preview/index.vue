@@ -50,8 +50,9 @@ export default defineComponent({
       dragging: false,
       startX: 0,
       startY: 0,
-      offsetX: 0,
-      offsetY: 0,
+      lastOffsetX: 0,
+      lastOffsetY: 0,
+      ele: null,
     });
 
     const onConfigItemClick = (config, index, e) => {
@@ -70,10 +71,11 @@ export default defineComponent({
       const target = e.currentTarget;
       const offsetX = Number(target.getAttribute("offsetX"));
       const offsetY = Number(target.getAttribute("offsetY"));
+      mouseState.value.ele = target;
       mouseState.value.startX = clientX;
       mouseState.value.startY = clientY;
-      mouseState.value.offsetX = offsetX;
-      mouseState.value.offsetY = offsetY;
+      mouseState.value.lastOffsetX = offsetX;
+      mouseState.value.lastOffsetY = offsetY;
       mouseState.value.dragging = true;
     };
 
@@ -81,19 +83,34 @@ export default defineComponent({
       if (!mouseState.value.dragging) {
         return;
       }
+      // 【此处判断是因为元素移动时可能进入其他同级元素的mousemove事件中，导致拖拽失效】
+      if (mouseState.value.ele !== e.currentTarget) {
+        return;
+      }
       const { clientX, clientY } = e;
-      const { startX, startY, offsetX, offsetY } = mouseState.value;
+      const { startX, startY, lastOffsetX, lastOffsetY } = mouseState.value;
       const absX = Math.abs(startX - clientX);
       const absY = Math.abs(startY - clientY);
       const target = e.currentTarget;
-      let resultX = absX;
-      let resultY = absY;
-      if (startX > clientX) {
-        resultX = -resultX;
+      // 1、首先获取本身的偏移量
+      // 2、计算当前移动的绝对值
+      // 3、判断方向进行处理
+      let resultX = 0;
+      let resultY = 0;
+      if (startX < clientX) {
+        // 往下走，transformx应该是正直
+        resultX = absX + lastOffsetX;
+      } else {
+        resultX = -absX + lastOffsetX;
       }
-      if (startY > clientY) {
-        resultY = -resultY;
+
+      if (startY < clientY) {
+        // 往右走
+        resultY = absY + lastOffsetY;
+      } else {
+        resultY = -absY + lastOffsetY;
       }
+      // console.log(`resultX: ${resultX}, resultY: ${resultY};`);
       const style = `translate(${resultX}px, ${resultY}px)`;
       target.setAttribute("offsetX", resultX);
       target.setAttribute("offsetY", resultY);
@@ -104,10 +121,10 @@ export default defineComponent({
       mouseState.value.dragging = false;
       mouseState.value.startX = 0;
       mouseState.value.startY = 0;
-      mouseState.value.offsetX = 0;
-      mouseState.value.offsetY = 0;
+      mouseState.value.lastOffsetX = 0;
+      mouseState.value.lastOffsetY = 0;
+      mouseState.value.ele = null;
       console.log("drag end");
-      console.log(e);
     };
 
     window.addEventListener("mouseup", onConfigItemMouseUp);
@@ -132,6 +149,7 @@ export default defineComponent({
 
 .happy-preview-wrapper {
   position: relative;
+  overflow: hidden;
 }
 
 .config-item {
