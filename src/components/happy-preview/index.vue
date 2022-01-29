@@ -11,8 +11,9 @@
         isWrapper="true"
         :index="i"
         :class="{ active: configIndex === i }"
+        :style="item.style"
         v-for="(item, i) in configList"
-        :key="item.name"
+        :key="item.id || item.name + i || i"
         @click="onConfigItemClick(item, i, $event)"
       >
         <component
@@ -57,7 +58,7 @@ export default defineComponent({
       default: () => [],
     },
   },
-  setup() {
+  setup(props) {
     const maskStyle = ref({});
     const configIndex = ref(-1);
     const mouseState = ref({
@@ -142,6 +143,27 @@ export default defineComponent({
       return false;
     };
 
+    const getConfigList = () => {
+      const list = [...props.configList];
+      // 拿到所有的元素，更新对应的数据节点相应属性，比如transfrom
+      const eleList = document.querySelectorAll(".config-item");
+      for (let i = 0; i < list.length; i++) {
+        const data: any = list[i];
+        const currentEle = eleList[i];
+        const x = Number(currentEle.getAttribute("offsetX"));
+        const y = Number(currentEle.getAttribute("offsetY"));
+        const style = {
+          transform: `translate(${x}px, ${y}px);`,
+          color: "red",
+        };
+        data.style = Object.assign(data.style || {}, style);
+      }
+      return list;
+    };
+    const getCurrentConfigIndex = () => {
+      return configIndex.value;
+    };
+
     window.addEventListener("mouseup", onConfigItemMouseUp);
 
     return {
@@ -152,6 +174,8 @@ export default defineComponent({
       onConfigItemMouseDown,
       onConfigItemMouseMove,
       onConfigItemMouseUp,
+      getConfigList,
+      getCurrentConfigIndex,
     };
   },
 });
@@ -165,6 +189,8 @@ export default defineComponent({
 
 .happy-preview-wrapper {
   position: relative;
+  width: 100%;
+  min-height: 100%;
   overflow: hidden;
 
   .config-list-wrapper {
@@ -182,11 +208,5 @@ export default defineComponent({
     inset: 0;
     border: 3px solid #ff8000;
   }
-}
-.config-item-mask {
-  position: absolute;
-  left: 0;
-  right: 0;
-  border: 2px solid #ff8000;
 }
 </style>
