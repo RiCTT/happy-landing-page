@@ -1,20 +1,26 @@
 <template>
   <div class="happy-preview-wrapper">
     <div
-      class="config-item"
-      v-for="(item, i) in configList"
-      :key="item.name"
-      @click="onConfigItemClick(item, i, $event)"
+      class="config-list-wrapper"
       @mousedown="onConfigItemMouseDown"
-      @mousemove="onConfigItemMouseMove"
+      @mousemove.stop="onConfigItemMouseMove"
+      @mouseup.stop.prevent="onConfigItemMouseUp"
     >
-      <component
-        :is="item.name"
-        width="100%"
-        height="100%"
-        style="pointer-events: none; user-select: none"
-        v-bind="item.data"
-      />
+      <div
+        class="config-item"
+        v-for="(item, i) in configList"
+        :key="item.name"
+        :id="i + 1"
+        @click="onConfigItemClick(item, i, $event)"
+      >
+        <component
+          :is="item.name"
+          width="100%"
+          height="100%"
+          style="pointer-events: none; user-select: none"
+          v-bind="item.data"
+        />
+      </div>
     </div>
     <!-- <div class="config-item-mask" :style="maskStyle"></div> -->
   </div>
@@ -68,7 +74,7 @@ export default defineComponent({
 
     const onConfigItemMouseDown = (e) => {
       const { clientX, clientY } = e;
-      const target = e.currentTarget;
+      const target = e.target;
       const offsetX = Number(target.getAttribute("offsetX"));
       const offsetY = Number(target.getAttribute("offsetY"));
       mouseState.value.ele = target;
@@ -76,22 +82,27 @@ export default defineComponent({
       mouseState.value.startY = clientY;
       mouseState.value.lastOffsetX = offsetX;
       mouseState.value.lastOffsetY = offsetY;
-      mouseState.value.dragging = true;
+      if (!target.className || target.className.indexOf("config-item") === -1) {
+        mouseState.value.dragging = false;
+      } else {
+        mouseState.value.dragging = true;
+      }
     };
 
     const onConfigItemMouseMove = (e) => {
       if (!mouseState.value.dragging) {
         return;
       }
-      // 【此处判断是因为元素移动时可能进入其他同级元素的mousemove事件中，导致拖拽失效】
-      if (mouseState.value.ele !== e.currentTarget) {
+      if (!mouseState.value.ele) {
         return;
       }
+
       const { clientX, clientY } = e;
-      const { startX, startY, lastOffsetX, lastOffsetY } = mouseState.value;
+      const { startX, startY, lastOffsetX, lastOffsetY, ele } =
+        mouseState.value;
       const absX = Math.abs(startX - clientX);
       const absY = Math.abs(startY - clientY);
-      const target = e.currentTarget;
+      const target: any = ele;
       // 1、首先获取本身的偏移量
       // 2、计算当前移动的绝对值
       // 3、判断方向进行处理
@@ -117,7 +128,7 @@ export default defineComponent({
       target.style.transform = style;
     };
 
-    const onConfigItemMouseUp = (e) => {
+    const onConfigItemMouseUp = () => {
       mouseState.value.dragging = false;
       mouseState.value.startX = 0;
       mouseState.value.startY = 0;
@@ -125,6 +136,7 @@ export default defineComponent({
       mouseState.value.lastOffsetY = 0;
       mouseState.value.ele = null;
       console.log("drag end");
+      return false;
     };
 
     window.addEventListener("mouseup", onConfigItemMouseUp);
@@ -150,6 +162,12 @@ export default defineComponent({
 .happy-preview-wrapper {
   position: relative;
   overflow: hidden;
+
+  .config-list-wrapper {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+  }
 }
 
 .config-item {
