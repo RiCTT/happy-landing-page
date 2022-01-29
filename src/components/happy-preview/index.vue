@@ -8,9 +8,11 @@
     >
       <div
         class="config-item"
+        isWrapper="true"
+        :index="i"
+        :class="{ active: configIndex === i }"
         v-for="(item, i) in configList"
         :key="item.name"
-        :id="i + 1"
         @click="onConfigItemClick(item, i, $event)"
       >
         <component
@@ -20,9 +22,14 @@
           style="pointer-events: none; user-select: none"
           v-bind="item.data"
         />
+        <div
+          v-if="configIndex === i"
+          class="config-item-mask"
+          style="pointer-events: none; user-select: none"
+          :style="maskStyle"
+        ></div>
       </div>
     </div>
-    <!-- <div class="config-item-mask" :style="maskStyle"></div> -->
   </div>
 </template>
 
@@ -52,6 +59,7 @@ export default defineComponent({
   },
   setup() {
     const maskStyle = ref({});
+    const configIndex = ref(-1);
     const mouseState = ref({
       dragging: false,
       startX: 0,
@@ -62,14 +70,7 @@ export default defineComponent({
     });
 
     const onConfigItemClick = (config, index, e) => {
-      const currentTarget = e.currentTarget;
-      const offsetTop = currentTarget.offsetTop;
-      const offsetHeight = currentTarget.offsetHeight;
-
-      maskStyle.value = {
-        top: offsetTop + "px",
-        height: offsetHeight + "px",
-      };
+      configIndex.value = index;
     };
 
     const onConfigItemMouseDown = (e) => {
@@ -82,10 +83,12 @@ export default defineComponent({
       mouseState.value.startY = clientY;
       mouseState.value.lastOffsetX = offsetX;
       mouseState.value.lastOffsetY = offsetY;
-      if (!target.className || target.className.indexOf("config-item") === -1) {
-        mouseState.value.dragging = false;
-      } else {
+      configIndex.value = Number(target.getAttribute("index"));
+      const isWrapper = Boolean(target.getAttribute("isWrapper"));
+      if (isWrapper) {
         mouseState.value.dragging = true;
+      } else {
+        mouseState.value.dragging = false;
       }
     };
 
@@ -144,6 +147,7 @@ export default defineComponent({
     return {
       maskStyle,
       mouseState,
+      configIndex,
       onConfigItemClick,
       onConfigItemMouseDown,
       onConfigItemMouseMove,
@@ -171,7 +175,13 @@ export default defineComponent({
 }
 
 .config-item {
+  position: relative;
   box-sizing: border-box;
+  .config-item-mask {
+    position: absolute;
+    inset: 0;
+    border: 3px solid #ff8000;
+  }
 }
 .config-item-mask {
   position: absolute;
