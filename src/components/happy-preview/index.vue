@@ -29,7 +29,12 @@
           class="config-item-mask"
           style="pointer-events: none; user-select: none"
           :style="maskStyle"
-        ></div>
+        >
+          <span class="square left-top"></span>
+          <span class="square left-bottom"></span>
+          <span class="square right-top"></span>
+          <span class="square right-bottom"></span>
+        </div>
       </div>
     </div>
   </div>
@@ -269,6 +274,35 @@ export default defineComponent({
     position: absolute;
     inset: 0;
     border: 3px solid #ff8000;
+
+    .square {
+      position: absolute;
+      border: 1px solid #ff8000;
+      padding: 4px;
+      background-color: #fff;
+      cursor: pointer;
+
+      &.left-top {
+        top: 0;
+        left: 0;
+        transform: translate(-50%, -50%);
+      }
+      &.left-bottom {
+        left: 0;
+        bottom: 0;
+        transform: translate(-50%, 50%);
+      }
+      &.right-top {
+        right: 0;
+        top: 0;
+        transform: translate(50%, -50%);
+      }
+      &.right-bottom {
+        right: 0;
+        bottom: 0;
+        transform: translate(50%, 50%);
+      }
+    }
   }
 }
 </style>
