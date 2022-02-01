@@ -87,27 +87,28 @@ export default defineComponent({
         },
       },
     ]);
-
+    // 提高层级
     const onMoveUpBtn = () => {
       const index = previewWrp.value.getCurrentConfigIndex();
       const currentConfigList = previewWrp.value.getConfigList();
-      if (index === -1 || index === 0) {
+      if (index === -1) {
         return;
       }
-      const temp = currentConfigList[index - 1];
-      currentConfigList[index - 1] = currentConfigList[index];
-      currentConfigList[index] = temp;
+      const current = currentConfigList[index];
+      const zIndex = current.zIndex || 10;
+      current.zIndex = zIndex + 1;
       configList.value = [...currentConfigList];
     };
+    // 降低层级
     const onMoveDownBtn = () => {
       const index = previewWrp.value.getCurrentConfigIndex();
       const currentConfigList = previewWrp.value.getConfigList();
-      if (index === -1 || index === currentConfigList.length - 1) {
+      if (index === -1) {
         return;
       }
-      const temp = currentConfigList[index + 1];
-      currentConfigList[index + 1] = currentConfigList[index];
-      currentConfigList[index] = temp;
+      const current = currentConfigList[index];
+      const zIndex = current.zIndex || 10;
+      current.zIndex = zIndex - 1;
       configList.value = [...currentConfigList];
     };
     const onRemoveBtn = () => {

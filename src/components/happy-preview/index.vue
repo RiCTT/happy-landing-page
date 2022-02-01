@@ -180,7 +180,7 @@ export default defineComponent({
           // transform: `translate(${x}px, ${y}px);`,
           left: `${x}px`,
           top: `${y}px`,
-          zIndex: 10 + i,
+          zIndex: data.zIndex || 10 + i,
         };
         data.style = Object.assign(data.style || {}, style);
       }
