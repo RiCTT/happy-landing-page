@@ -1,7 +1,12 @@
 <template>
   <div class="preview-wrapper">
     <div class="preview-inner">
-      <HappyPreview ref="previewWrp" :configList="configList" />
+      <HappyPreview
+        ref="previewWrp"
+        :configList="configList"
+        :boxHeight="boxHeight"
+        @config-change="handleConfigChange"
+      />
     </div>
     <div class="preview-menu">
       <div class="menu-item" @click="onMoveUpBtn">
@@ -12,6 +17,12 @@
       </div>
       <div class="menu-item" @click="onRemoveBtn">
         <delete-two-tone :two-tone-color="twoToneColor" />
+      </div>
+      <div class="menu-item" @click="onAddHeightBtn">
+        <plus-square-two-tone :two-tone-color="twoToneColor" />
+      </div>
+      <div class="menu-item" @click="onMinusHeightBtn">
+        <minus-square-two-tone :two-tone-color="twoToneColor" />
       </div>
     </div>
   </div>
@@ -24,6 +35,8 @@ import {
   UpCircleTwoTone,
   DownCircleTwoTone,
   DeleteTwoTone,
+  PlusSquareTwoTone,
+  MinusSquareTwoTone,
 } from "@ant-design/icons-vue";
 
 export default defineComponent({
@@ -32,9 +45,12 @@ export default defineComponent({
     UpCircleTwoTone,
     DownCircleTwoTone,
     DeleteTwoTone,
+    PlusSquareTwoTone,
+    MinusSquareTwoTone,
   },
   setup() {
     const previewWrp: any = ref({});
+    const boxHeight = ref("100%");
     const twoToneColor = ref("#ff8000");
     const configList = ref([
       {
@@ -43,6 +59,10 @@ export default defineComponent({
         data: {
           text: "按钮",
         },
+        style: {
+          left: "10px",
+          top: "100px",
+        },
       },
       {
         id: 456,
@@ -50,12 +70,20 @@ export default defineComponent({
         data: {
           src: "https://image.huanghepiao.com/images/upload/20191224/15771484951260.jpg",
         },
+        style: {
+          left: "100px",
+          top: "200px",
+        },
       },
       {
         id: 789,
         name: "van-image",
         data: {
           src: "https://tse1-mm.cn.bing.net/th/id/R-C.a84831186bddfe9b44ca645f0a8c021b?rik=mVmIauj3YmAFmA&riu=http%3a%2f%2fimgx.xiawu.com%2fxzimg%2fi3%2f291799040%2fTB2WvkEEER1BeNjy0FmXXb0wVXa_!!291799040-0-item_pic.jpg&ehk=rTrMzjXT9yEy8ElfC5OjPXscZ35Sk93tYB5iNxWbWSI%3d&risl=&pid=ImgRaw&r=0",
+        },
+        style: {
+          left: "210px",
+          top: "140px",
         },
       },
     ]);
@@ -92,16 +120,33 @@ export default defineComponent({
       configList.value = [...currentConfigList];
     };
 
+    const onAddHeightBtn = () => {
+      boxHeight.value = parseInt(boxHeight.value) + 20 + "px";
+    };
+
+    const onMinusHeightBtn = () => {
+      boxHeight.value = parseInt(boxHeight.value) - 20 + "px";
+    };
+
+    const handleConfigChange = (data) => {
+      configList.value = [...data];
+    };
+
     onMounted(() => {
-      console.log(previewWrp.value); // Proxy {…}
+      const el = previewWrp.value.$el;
+      boxHeight.value = el.offsetHeight + "px";
     });
     return {
+      boxHeight,
       previewWrp,
       configList,
       twoToneColor,
       onMoveUpBtn,
       onMoveDownBtn,
       onRemoveBtn,
+      onAddHeightBtn,
+      onMinusHeightBtn,
+      handleConfigChange,
     };
   },
 });

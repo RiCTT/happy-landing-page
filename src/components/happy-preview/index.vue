@@ -2,7 +2,8 @@
   <div class="happy-preview-wrapper">
     <div
       class="config-list-wrapper"
-      @mousedown="onConfigItemMouseDown"
+      :style="{ height: boxHeight }"
+      @mousedown.stop="onConfigItemMouseDown"
       @mousemove.stop="onConfigItemMouseMove"
       @mouseup.stop.prevent="onConfigItemMouseUp"
     >
@@ -13,8 +14,8 @@
         :class="{ active: configIndex === i }"
         :style="item.style"
         v-for="(item, i) in configList"
-        :key="item.id || item.name + i || i"
-        @click="onConfigItemClick(item, i, $event)"
+        :key="item.id"
+        @click.stop="onConfigItemClick(item, i, $event)"
       >
         <component
           :is="item.name"
@@ -36,7 +37,7 @@
 
 <script lang="ts">
 // 该组件用来展示页面组件列表，如涉及样式处理，可在外层或者穿透
-import { defineComponent, ref } from "vue";
+import { defineComponent, effect, onMounted, ref, watch } from "vue";
 
 const createMeta = () => {
   const meta = document.createElement("meta");
@@ -51,14 +52,21 @@ const createMeta = () => {
 
 createMeta();
 
+const OFFSET_X_KEY = "offsetX";
+const OFFSET_Y_KEY = "offsetY";
+
 export default defineComponent({
   props: {
     configList: {
       type: Array,
       default: () => [],
     },
+    boxHeight: {
+      type: [String, Number],
+      default: "100%",
+    },
   },
-  setup(props) {
+  setup(props, ctx) {
     const maskStyle = ref({});
     const configIndex = ref(-1);
     const mouseState = ref({
@@ -77,19 +85,25 @@ export default defineComponent({
     const onConfigItemMouseDown = (e) => {
       const { clientX, clientY } = e;
       const target = e.target;
-      const offsetX = Number(target.getAttribute("offsetX"));
-      const offsetY = Number(target.getAttribute("offsetY"));
-      mouseState.value.ele = target;
+      const offsetX = Number(target.getAttribute(OFFSET_X_KEY));
+      const offsetY = Number(target.getAttribute(OFFSET_Y_KEY));
+      console.log("down!");
+      console.log(offsetX);
+      console.log(offsetY);
       mouseState.value.startX = clientX;
       mouseState.value.startY = clientY;
       mouseState.value.lastOffsetX = offsetX;
       mouseState.value.lastOffsetY = offsetY;
-      configIndex.value = Number(target.getAttribute("index"));
+      configIndex.value = target.getAttribute("index")
+        ? Number(target.getAttribute("index"))
+        : -1;
       const isWrapper = Boolean(target.getAttribute("isWrapper"));
       if (isWrapper) {
         mouseState.value.dragging = true;
+        mouseState.value.ele = target;
       } else {
         mouseState.value.dragging = false;
+        mouseState.value.ele = null;
       }
     };
 
@@ -100,12 +114,15 @@ export default defineComponent({
       if (!mouseState.value.ele) {
         return;
       }
+      console.log("move ing !");
 
       const { clientX, clientY } = e;
       const { startX, startY, lastOffsetX, lastOffsetY, ele } =
         mouseState.value;
       const absX = Math.abs(startX - clientX);
       const absY = Math.abs(startY - clientY);
+      console.log("absX: ", absX);
+      console.log("absY: ", absY);
       const target: any = ele;
       // 1、首先获取本身的偏移量
       // 2、计算当前移动的绝对值
@@ -125,11 +142,15 @@ export default defineComponent({
       } else {
         resultY = -absY + lastOffsetY;
       }
-      // console.log(`resultX: ${resultX}, resultY: ${resultY};`);
-      const style = `translate(${resultX}px, ${resultY}px)`;
-      target.setAttribute("offsetX", resultX);
-      target.setAttribute("offsetY", resultY);
-      target.style.transform = style;
+      console.log(`resultX: ${resultX}, resultY: ${resultY};`);
+      // const style = `translate(${resultX}px, ${resultY}px)`;
+      target.setAttribute(OFFSET_X_KEY, resultX);
+      target.setAttribute(OFFSET_Y_KEY, resultY);
+      // target.style.transform = style;
+      target.style.left = resultX + "px";
+      target.style.top = resultY + "px";
+      console.log("drag move");
+      console.log(JSON.stringify(props.configList));
     };
 
     const onConfigItemMouseUp = () => {
@@ -140,6 +161,9 @@ export default defineComponent({
       mouseState.value.lastOffsetY = 0;
       mouseState.value.ele = null;
       console.log("drag end");
+      console.log(JSON.stringify(props.configList));
+      const list = getConfigList();
+      ctx.emit("config-change", list);
       return false;
     };
 
@@ -150,19 +174,52 @@ export default defineComponent({
       for (let i = 0; i < list.length; i++) {
         const data: any = list[i];
         const currentEle = eleList[i];
-        const x = Number(currentEle.getAttribute("offsetX"));
-        const y = Number(currentEle.getAttribute("offsetY"));
+        const x = Number(currentEle.getAttribute(OFFSET_X_KEY));
+        const y = Number(currentEle.getAttribute(OFFSET_Y_KEY));
         const style = {
-          transform: `translate(${x}px, ${y}px);`,
-          color: "red",
+          // transform: `translate(${x}px, ${y}px);`,
+          left: `${x}px`,
+          top: `${y}px`,
+          zIndex: 10 + i,
         };
         data.style = Object.assign(data.style || {}, style);
       }
       return list;
     };
+
     const getCurrentConfigIndex = () => {
       return configIndex.value;
     };
+
+    const setEleAttribute = () => {
+      const list = [...props.configList];
+      // 拿到所有的元素，更新对应的数据节点相应属性，比如transfrom
+      const eleList = document.querySelectorAll(".config-item");
+      if (!eleList || eleList.length === 0) {
+        return;
+      }
+      for (let i = 0; i < list.length; i++) {
+        const data: any = list[i];
+        const currentEle = eleList[i];
+        if (data.style) {
+          const { left, top } = data.style;
+          if (left) {
+            currentEle.setAttribute(OFFSET_X_KEY, parseInt(left) + "");
+          }
+          if (top) {
+            currentEle.setAttribute(OFFSET_Y_KEY, parseInt(top) + "");
+          }
+        }
+      }
+    };
+
+    effect(() => {
+      setTimeout(() => {
+        console.log("run");
+        console.log(JSON.stringify(props.configList));
+        setEleAttribute();
+      });
+    });
 
     window.addEventListener("mouseup", onConfigItemMouseUp);
 
@@ -170,6 +227,7 @@ export default defineComponent({
       maskStyle,
       mouseState,
       configIndex,
+      setEleAttribute,
       onConfigItemClick,
       onConfigItemMouseDown,
       onConfigItemMouseMove,
@@ -201,7 +259,11 @@ export default defineComponent({
 }
 
 .config-item {
-  position: relative;
+  // position: relative;
+  position: absolute;
+  width: 100%;
+  left: 0;
+  top: 0;
   box-sizing: border-box;
   .config-item-mask {
     position: absolute;
