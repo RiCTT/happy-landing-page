@@ -1,5 +1,5 @@
 <template>
-  <div class="happy-preview-wrapper">
+  <div ref="wrapper" class="happy-preview-wrapper">
     <div
       class="config-list-wrapper"
       :style="{ height: boxHeight }"
@@ -19,7 +19,7 @@
       >
         <component
           :is="item.name"
-          width="100%"
+          :width="wrapperWidth"
           height="100%"
           style="pointer-events: none; user-select: none"
           v-bind="item.data"
@@ -72,6 +72,8 @@ export default defineComponent({
     },
   },
   setup(props, ctx) {
+    const wrapper = ref();
+    const wrapperWidth = ref();
     const maskStyle = ref({});
     const configIndex = ref(-1);
     const mouseState = ref({
@@ -81,6 +83,10 @@ export default defineComponent({
       lastOffsetX: 0,
       lastOffsetY: 0,
       ele: null,
+    });
+
+    onMounted(() => {
+      wrapperWidth.value = wrapper.value.offsetWidth;
     });
 
     const onConfigItemClick = (config, index, e) => {
@@ -229,6 +235,8 @@ export default defineComponent({
     window.addEventListener("mouseup", onConfigItemMouseUp);
 
     return {
+      wrapper,
+      wrapperWidth,
       maskStyle,
       mouseState,
       configIndex,

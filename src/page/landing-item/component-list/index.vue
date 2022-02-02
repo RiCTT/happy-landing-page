@@ -1,39 +1,38 @@
 <template>
   <div class="component-list-wrapper">
-    <p>组件选择列表</p>
-    <p>组件选择列表</p>
-    <p>组件选择列表</p>
-    <p>组件选择列表</p>
-    <p>组件选择列表</p>
-    <p>组件选择列表</p>
-    <p>组件选择列表</p>
-    <p>组件选择列表</p>
-    <p>组件选择列表</p>
-    <p>组件选择列表</p>
-    <p>组件选择列表</p>
-    <p>组件选择列表</p>
-    <p>组件选择列表</p>
-    <p>组件选择列表</p>
-    <p>组件选择列表</p>
-    <p>组件选择列表</p>
-    <p>组件选择列表</p>
-    <p>组件选择列表</p>
-    <p>组件选择列表</p>
-    <p>组件选择列表</p>
-    <p>组件选择列表</p>
-    <p>组件选择列表</p>
-    <p>组件选择列表</p>
-    <p>组件选择列表</p>
-    <p>组件选择列表</p>
-    <p>组件选择列表</p>
-    <p>组件选择列表</p>
+    <div class="category-wrapper basic">
+      <p class="category-title">基础组件</p>
+      <div class="category-component-wrapper">
+        <div
+          class="component-item"
+          v-for="(com, i) in basicList"
+          :key="i"
+          @click="onCompClick(com)"
+        >
+          <img class="component-item-icon" :src="com.iconSrc" alt="" />
+          <p class="component-item-text">{{ com.label }}</p>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
-
-export default defineComponent({});
+import { defineComponent, ref } from "vue";
+import { BasicComponents } from "./data.js";
+export default defineComponent({
+  components: {},
+  setup() {
+    const basicList = ref(BasicComponents);
+    const onCompClick = (comp) => {
+      console.log(comp);
+    };
+    return {
+      basicList,
+      onCompClick,
+    };
+  },
+});
 </script>
 
 <style lang="stylus" scoped>
@@ -46,5 +45,38 @@ export default defineComponent({});
   box-sizing: border-box;
   padding: 10px;
   scrollBar();
+}
+
+.category-wrapper {
+  text-align: left;
+  padding: 8px 12px;
+
+  .category-title {
+    font-size: 16px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #f2f2f2;
+  }
+}
+
+.category-component-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  .component-item {
+    width: 33%;
+    text-align: center;
+    margin-bottom: 10px;
+    cursor pointer
+
+    .component-item-icon {
+      width: 60%;
+      margin: 0 auto;
+    }
+
+    .component-item-text {
+      margin-top: 10px;
+      font-size: 12px;
+      color: #666;
+    }
+  }
 }
 </style>
