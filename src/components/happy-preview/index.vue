@@ -42,7 +42,7 @@
 
 <script lang="ts">
 // 该组件用来展示页面组件列表，如涉及样式处理，可在外层或者穿透
-import { defineComponent, effect, onMounted, ref, watch } from "vue";
+import { defineComponent, effect, onMounted, ref } from "vue";
 
 const createMeta = () => {
   const meta = document.createElement("meta");
@@ -89,7 +89,7 @@ export default defineComponent({
       wrapperWidth.value = wrapper.value.offsetWidth;
     });
 
-    const onConfigItemClick = (config, index, e) => {
+    const onConfigItemClick = (config, index) => {
       configIndex.value = index;
     };
 
