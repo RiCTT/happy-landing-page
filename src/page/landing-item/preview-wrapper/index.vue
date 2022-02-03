@@ -5,6 +5,7 @@
         ref="previewWrp"
         :configList="configList"
         :boxHeight="boxHeight"
+        @config-select="$emit('config-select', $event)"
         @config-change="handleConfigChange"
       />
     </div>
@@ -107,6 +108,10 @@ export default defineComponent({
       boxHeight.value = parseInt(boxHeight.value) - 20 + "px";
     };
 
+    const getCurrentIndex = () => {
+      return previewWrp.value.getCurrentConfigIndex();
+    };
+
     const handleConfigChange = (data) => {
       // configList.value = [...data];
       // ctx.emit("config-change", [...data]);
@@ -123,6 +128,7 @@ export default defineComponent({
     });
     return {
       boxHeight,
+      getCurrentIndex,
       previewWrp,
       twoToneColor,
       onMoveUpBtn,

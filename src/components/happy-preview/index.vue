@@ -91,6 +91,7 @@ export default defineComponent({
 
     const onConfigItemClick = (config, index) => {
       configIndex.value = index;
+      ctx.emit("config-select", config);
     };
 
     const onConfigItemMouseDown = (e) => {

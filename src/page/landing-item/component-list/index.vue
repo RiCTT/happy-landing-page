@@ -22,10 +22,11 @@ import { defineComponent, ref } from "vue";
 import { BasicComponents } from "./data.js";
 export default defineComponent({
   components: {},
-  setup() {
+  setup(props, ctx) {
     const basicList = ref(BasicComponents);
     const onCompClick = (comp) => {
       console.log(comp);
+      ctx.emit("add-component", comp);
     };
     return {
       basicList,
@@ -39,6 +40,7 @@ export default defineComponent({
 @import "~@/style/variables.styl"
 .component-list-wrapper {
   width: 30%;
+  max-width: 300px;
   background-color: #fff;
   height: 100%;
   overflow: auto;

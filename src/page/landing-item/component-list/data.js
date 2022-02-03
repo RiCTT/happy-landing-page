@@ -3,9 +3,30 @@ export const BasicComponents = [
     name: "van-button",
     label: "按钮",
     iconSrc: require("./images/button.png"),
+    props: {
+      text: {
+        label: "按钮文本",
+        type: String,
+        required: true,
+        ui: "text",
+        default: "按钮",
+      },
+      url: {
+        type: String,
+        label: "跳转链接",
+        ui: "text",
+        default: "",
+        validator: (rules, value) => {
+          if (value && !/https|http/.test(value)) {
+            return Promise.reject("必须指定http/s协议类型的地址");
+          }
+          return Promise.resolve();
+        },
+      },
+    },
   },
   {
-    name: "van-swipe",
+    name: "van-swipe-v2",
     label: "轮播",
     iconSrc: require("./images/coursel.png"),
   },

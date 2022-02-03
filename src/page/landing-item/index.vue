@@ -1,11 +1,13 @@
 <template>
   <div class="landing-item-wrapper">
-    <ComponentList />
+    <ComponentList @add-component="handleAddComponent" />
     <PreviewWrapper
+      ref="prefviewWrp"
       :configList="configList"
       @config-change="handleConfigChange"
+      @config-select="handleConfigSelect"
     />
-    <PropsForm />
+    <PropsForm :form="currentProps" @data-change="handleDataChange" />
   </div>
 </template>
 
@@ -14,6 +16,7 @@ import ComponentList from "./component-list/index.vue";
 import PreviewWrapper from "./preview-wrapper/index.vue";
 import PropsForm from "./props-form/index.vue";
 import { defineComponent, ref } from "vue";
+import { message } from "ant-design-vue";
 
 export default defineComponent({
   components: {
@@ -22,6 +25,10 @@ export default defineComponent({
     PreviewWrapper,
   },
   setup() {
+    const currentProps = ref({});
+
+    const prefviewWrp = ref();
+
     const configList = ref([
       {
         id: 11111,
@@ -86,9 +93,59 @@ export default defineComponent({
     const handleConfigChange = (data) => {
       configList.value = [...data];
     };
+
+    // 赋值到对应的组件data上
+    const handleDataChange = (data) => {
+      const index = prefviewWrp.value.getCurrentIndex();
+      const currentComp = configList.value[index];
+      const oldData = currentComp.data;
+      currentComp.data = Object.assign(oldData, data);
+    };
+
+    const handleAddComponent = (comp) => {
+      console.log(comp);
+      let data = initComponentDefaultValue(comp);
+      message.info("添加成功!");
+      configList.value.push(data);
+    };
+
+    const handleConfigSelect = (config) => {
+      const { props } = config;
+      currentProps.value = props;
+    };
+
+    const initComponentDefaultValue = (comp) => {
+      const id = Date.now();
+      const { name } = comp;
+      const result = { id, ...comp };
+      if (!result.style) {
+        result.style = {};
+      }
+      if (!result.data) {
+        result.data = {};
+      }
+      if (name === "van-button") {
+        result.data.text = "按钮";
+      }
+      if (name === "van-swipe-v2") {
+        result.style.height = "200px";
+      }
+      result.style.left = "0";
+      // result.style.top = "50%";
+      result.style.top = "0";
+      // result.style.transform = "translateY(-50%)";
+      result.style.zIndex = configList.value.length + 11;
+      return result;
+    };
+
     return {
       configList,
+      currentProps,
+      prefviewWrp,
+      handleDataChange,
+      handleConfigSelect,
       handleConfigChange,
+      handleAddComponent,
     };
   },
 });
