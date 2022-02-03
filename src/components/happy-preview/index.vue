@@ -227,8 +227,8 @@ export default defineComponent({
 
     effect(() => {
       setTimeout(() => {
-        console.log("run");
-        console.log(JSON.stringify(props.configList));
+        // console.log("run");
+        // console.log(JSON.stringify(props.configList));
         setEleAttribute();
       });
     });

@@ -15,6 +15,7 @@ import HappyTable from "@/components/happy-table/index.vue";
 import { defineComponent, onMounted, reactive, ref } from "vue";
 import { useTable } from "./hooks/useTable.js";
 import { useQuery } from "./hooks/useQuery.js";
+import { getPageList } from "../landing-item/utils";
 
 export default defineComponent({
   components: {
@@ -35,26 +36,41 @@ export default defineComponent({
 
     const onQuery = () => {
       console.log(queryModel.value);
+      console.log(getPageList());
+      console.log("getPageList");
       setState("loading", true);
       setTimeout(() => {
-        const len = Math.round(Math.random() * 10);
-        const total = Math.round(Math.random() * 120);
-        const data: any[] = [];
-        for (let i = 0; i < len; i++) {
-          data.push({
-            key: i + 1 + "S",
-            ID: Math.random().toString(),
+        // const len = Math.round(Math.random() * 10);
+        // const total = Math.round(Math.random() * 120);
+        // const data: any[] = [];
+        // for (let i = 0; i < len; i++) {
+        //   data.push({
+        //     key: i + 1 + "S",
+        //     ID: Math.random().toString(),
+        //     visitor: Math.round(Math.random() * 100000),
+        //     name: "胡彦斌" + i + "号",
+        //     time: Math.round(Math.random() * 100),
+        //     updateTime: new Date().toLocaleDateString(),
+        //     age: i + Math.random() * 10,
+        //     status: Math.random() > 0.5 ? "pink" : "blue",
+        //     address: "西湖区湖底公园1号" + i,
+        //   });
+        // }
+        const data = getPageList().map((e, i) => {
+          return {
+            ...e,
             visitor: Math.round(Math.random() * 100000),
+            key: i + 1 + "S",
             name: "胡彦斌" + i + "号",
             time: Math.round(Math.random() * 100),
             updateTime: new Date().toLocaleDateString(),
             age: i + Math.random() * 10,
             status: Math.random() > 0.5 ? "pink" : "blue",
             address: "西湖区湖底公园1号" + i,
-          });
-        }
+          };
+        });
         setState("data", data);
-        setState("total", total);
+        setState("total", 1200);
         setState("loading", false);
       }, 1500);
     };

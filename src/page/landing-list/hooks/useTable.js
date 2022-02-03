@@ -11,7 +11,7 @@ export const useTable = () => {
     },
     {
       title: "落地页ID",
-      dataIndex: "ID",
+      dataIndex: "id",
     },
     {
       title: "访问量",
@@ -61,7 +61,7 @@ export const useTable = () => {
           router.push({
             name: "LandingItem",
             query: {
-              ID: record.ID,
+              id: record.id,
             },
           });
         };

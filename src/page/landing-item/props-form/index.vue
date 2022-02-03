@@ -39,6 +39,9 @@ export default defineComponent({
     form: {
       type: Object,
     },
+    data: {
+      type: Object,
+    },
   },
   setup(props, ctx) {
     const activeKey = ref("1");
@@ -48,16 +51,20 @@ export default defineComponent({
     watch(
       () => props.form,
       (val = {}) => {
+        const propsData: any = props.data;
         const result = {};
         const rulesResult = {};
         Object.keys(val).forEach((key) => {
           const { default: initValue, required, validator } = val[key];
-          result[key] = initValue || "";
+          result[key] = propsData[key] || initValue || "";
           rulesResult[key] = [];
           if (required) {
             rulesResult[key].push({ required: true, message: "不能为空" });
           }
           if (validator) {
+            console.log("typeof validao");
+            console.log(typeof validator);
+            console.log(validator);
             rulesResult[key].push({ validator });
           }
         });

@@ -34,6 +34,14 @@ export const BasicComponents = [
     name: "van-image",
     label: "图片",
     iconSrc: require("./images/image.png"),
+    props: {
+      src: {
+        type: String,
+        label: "图片链接",
+        ui: "text",
+        required: true,
+      },
+    },
   },
   {
     name: "van-count-down",
