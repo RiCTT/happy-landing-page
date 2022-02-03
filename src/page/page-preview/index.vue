@@ -1,32 +1,32 @@
 <template>
-  <div>
-    <HappyPreview :configList="configList" />
+  <div class="preview-wrapper">
+    <HappyPreview :configList="configList" mode="show" />
   </div>
 </template>
 
 <script lang="ts">
 import HappyPreview from "@/components/happy-preview/index.vue";
-import { defineComponent, ref } from "vue";
-
+import { defineComponent, ref, computed } from "vue";
+import { getPageList } from "../landing-item/utils";
+import { useRoute } from "vue-router";
 export default defineComponent({
   components: {
     HappyPreview,
   },
   setup() {
-    const configList = ref([
-      {
-        name: "van-button",
-        data: {
-          text: "button",
-        },
-      },
-      {
-        name: "van-image",
-        data: {
-          src: "https://tse1-mm.cn.bing.net/th/id/R-C.a84831186bddfe9b44ca645f0a8c021b?rik=mVmIauj3YmAFmA&riu=http%3a%2f%2fimgx.xiawu.com%2fxzimg%2fi3%2f291799040%2fTB2WvkEEER1BeNjy0FmXXb0wVXa_!!291799040-0-item_pic.jpg&ehk=rTrMzjXT9yEy8ElfC5OjPXscZ35Sk93tYB5iNxWbWSI%3d&risl=&pid=ImgRaw&r=0",
-        },
-      },
-    ]);
+    const configList = ref([]);
+    const route = useRoute();
+    const pageId = computed(() => route.query.id);
+    if (pageId.value) {
+      const pageList = getPageList();
+      const data = pageList.find((e) => String(e.id) === pageId.value);
+      if (data) {
+        console.log(data);
+        console.log("find");
+        const { configList: result } = data;
+        configList.value = result;
+      }
+    }
     return {
       configList,
     };
@@ -34,4 +34,9 @@ export default defineComponent({
 });
 </script>
 
-<style lang="stylus" scoped></style>
+<style lang="stylus" scoped>
+.preview-wrapper {
+  width: 100%;
+  height: 100%;
+}
+</style>

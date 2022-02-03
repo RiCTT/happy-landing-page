@@ -70,6 +70,11 @@ export default defineComponent({
       type: [String, Number],
       default: "100%",
     },
+    mode: {
+      type: String,
+      // edit, show
+      default: "edit",
+    },
   },
   setup(props, ctx) {
     const wrapper = ref();
@@ -90,8 +95,10 @@ export default defineComponent({
     });
 
     const onConfigItemClick = (config, index) => {
-      configIndex.value = index;
-      ctx.emit("config-select", config);
+      if (props.mode === "edit") {
+        configIndex.value = index;
+        ctx.emit("config-select", config);
+      }
     };
 
     const onConfigItemMouseDown = (e) => {
