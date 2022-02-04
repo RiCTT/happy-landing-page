@@ -12,22 +12,21 @@
         isWrapper="true"
         :index="i"
         :class="{ active: configIndex === i }"
-        :style="item.style"
         v-for="(item, i) in configList"
         :key="item.id"
+        :style="getConfigWrapperStyle(item.style)"
         @click.stop="onConfigItemClick(item, i, $event)"
       >
         <component
           :is="item.name"
           :width="wrapperWidth"
           height="100%"
-          style="pointer-events: none; user-select: none"
+          :style="getConfigWrapperInnerStyle(item.style)"
           v-bind="item.data"
         />
         <div
-          v-if="configIndex === i"
+          v-if="configIndex === i && mode === 'edit'"
           class="config-item-mask"
-          style="pointer-events: none; user-select: none"
           :style="maskStyle"
         >
           <span class="square left-top"></span>
@@ -102,6 +101,9 @@ export default defineComponent({
     };
 
     const onConfigItemMouseDown = (e) => {
+      if (props.mode !== "edit") {
+        return;
+      }
       const { clientX, clientY } = e;
       const target = e.target;
       const offsetX = Number(target.getAttribute(OFFSET_X_KEY));
@@ -127,6 +129,9 @@ export default defineComponent({
     };
 
     const onConfigItemMouseMove = (e) => {
+      if (props.mode !== "edit") {
+        return;
+      }
       if (!mouseState.value.dragging) {
         return;
       }
@@ -173,6 +178,9 @@ export default defineComponent({
     };
 
     const onConfigItemMouseUp = () => {
+      if (props.mode !== "edit") {
+        return;
+      }
       mouseState.value.dragging = false;
       mouseState.value.startX = 0;
       mouseState.value.startY = 0;
@@ -232,15 +240,39 @@ export default defineComponent({
       }
     };
 
+    const getConfigWrapperStyle = (style) => {
+      // 只关心组件一些逻辑样式，不需要业务样式
+      const { top, left, zIndex } = style;
+      return {
+        top,
+        left,
+        zIndex,
+      };
+    };
+
+    const getConfigWrapperInnerStyle = (style = {}) => {
+      const base = { pointerEvents: "none", userSelect: "none" };
+      const pureStyle: any = { ...style };
+      let result = pureStyle;
+      // 因为容器定位的样式跟业务样式绑定在一块，所以这里要剔除掉
+      delete pureStyle.top;
+      delete pureStyle.left;
+      delete pureStyle.zIndex;
+      if (props.mode === "edit") {
+        result = Object.assign(base, pureStyle);
+      }
+      return result;
+    };
+
     effect(() => {
       setTimeout(() => {
-        // console.log("run");
-        // console.log(JSON.stringify(props.configList));
         setEleAttribute();
       });
     });
 
-    window.addEventListener("mouseup", onConfigItemMouseUp);
+    if (props.mode === "edit") {
+      window.addEventListener("mouseup", onConfigItemMouseUp);
+    }
 
     return {
       wrapper,
@@ -248,6 +280,8 @@ export default defineComponent({
       maskStyle,
       mouseState,
       configIndex,
+      getConfigWrapperStyle,
+      getConfigWrapperInnerStyle,
       setEleAttribute,
       onConfigItemClick,
       onConfigItemMouseDown,
@@ -290,6 +324,8 @@ export default defineComponent({
     position: absolute;
     inset: 0;
     border: 3px solid #ff8000;
+    pointer-events: none;
+    user-select: none
 
     .square {
       position: absolute;

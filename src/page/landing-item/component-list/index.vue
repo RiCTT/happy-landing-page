@@ -39,8 +39,7 @@ export default defineComponent({
 <style lang="stylus" scoped>
 @import "~@/style/variables.styl"
 .component-list-wrapper {
-  width: 30%;
-  max-width: 300px;
+  width: 300px;
   background-color: #fff;
   height: 100%;
   overflow: auto;

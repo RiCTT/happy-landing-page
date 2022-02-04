@@ -23,7 +23,7 @@ import PropsForm from "./props-form/index.vue";
 import { defineComponent, ref, computed } from "vue";
 import { message } from "ant-design-vue";
 import { getPageList, setPageList } from "./utils";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 
 export default defineComponent({
   components: {
@@ -33,6 +33,7 @@ export default defineComponent({
   },
   setup() {
     const route = useRoute();
+    const router = useRouter();
     const pageId = computed(() => route.query.id);
 
     const currentProps = ref({});
@@ -110,12 +111,16 @@ export default defineComponent({
         };
         list.push(page);
         setPageList(list);
+        setTimeout(() => {
+          router.go(-1);
+        }, 300);
       } else {
         const index = list.findIndex((e) => String(e.id) === pageId.value);
         const data = list[index];
         data.configList = configList.value;
         setPageList(list);
       }
+      message.info("保存成功");
     };
 
     const handleConfigChange = (data) => {

@@ -149,6 +149,8 @@ export default defineComponent({
   position: relative;
   width: 375px;
   height: 667px;
+  min-width: 375px;
+  min-height: 667px;
   background-image: url('./phone.png');
   background-size: 100% 100%;
   padding: 55px 10px 75px 12px;

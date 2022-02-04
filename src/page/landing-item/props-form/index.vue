@@ -3,7 +3,6 @@
     <a-tabs v-model:activeKey="activeKey" centered>
       <a-tab-pane key="1" tab="组件属性">
         <a-form
-          v-if="form"
           :model="model"
           :rules="rules"
           layout="vertical"

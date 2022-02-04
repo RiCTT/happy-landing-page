@@ -6,7 +6,11 @@
       :queryList="queryList"
       size="middle"
       @search="onQuery"
-    />
+    >
+      <template v-slot:table-button>
+        <a-button type="primary" @click="goToCreate">新增</a-button>
+      </template>
+    </HappyTable>
   </div>
 </template>
 
@@ -16,6 +20,7 @@ import { defineComponent, onMounted, reactive, ref } from "vue";
 import { useTable } from "./hooks/useTable.js";
 import { useQuery } from "./hooks/useQuery.js";
 import { getPageList } from "../landing-item/utils";
+import { useRouter } from "vue-router";
 
 export default defineComponent({
   components: {
@@ -25,6 +30,7 @@ export default defineComponent({
     const { table, setState } = useTable();
     const { queryList } = useQuery();
     const queryModel = ref({ pageIndex: 1, pageSize: 10 });
+    const router = useRouter();
 
     const state = reactive({
       bordered: false,
@@ -40,22 +46,6 @@ export default defineComponent({
       console.log("getPageList");
       setState("loading", true);
       setTimeout(() => {
-        // const len = Math.round(Math.random() * 10);
-        // const total = Math.round(Math.random() * 120);
-        // const data: any[] = [];
-        // for (let i = 0; i < len; i++) {
-        //   data.push({
-        //     key: i + 1 + "S",
-        //     ID: Math.random().toString(),
-        //     visitor: Math.round(Math.random() * 100000),
-        //     name: "胡彦斌" + i + "号",
-        //     time: Math.round(Math.random() * 100),
-        //     updateTime: new Date().toLocaleDateString(),
-        //     age: i + Math.random() * 10,
-        //     status: Math.random() > 0.5 ? "pink" : "blue",
-        //     address: "西湖区湖底公园1号" + i,
-        //   });
-        // }
         const data = getPageList().map((e, i) => {
           return {
             ...e,
@@ -75,12 +65,19 @@ export default defineComponent({
       }, 1500);
     };
 
+    const goToCreate = () => {
+      router.push({
+        name: "LandingItem",
+      });
+    };
+
     return {
       state,
       table,
       queryModel,
-      onQuery,
       queryList,
+      onQuery,
+      goToCreate,
     };
   },
 });

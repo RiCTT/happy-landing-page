@@ -10,6 +10,9 @@
           @query="emitSearch"
         />
       </div>
+      <div class="before-table-header">
+        <slot name="table-button" />
+      </div>
       <!-- 查询表格 -->
       <div class="happy-table-data">
         <a-table
@@ -126,5 +129,17 @@ export default defineComponent({
 .happy-pagination {
   text-align: right;
   margin: 10px 0;
+}
+
+.before-table-header {
+  text-align: right;
+  margin-bottom: 10px;
+
+  >>> .ant-btn {
+    margin-right: 10px;
+    &::last-child {
+      margin-right: 0;
+    }
+  }
 }
 </style>

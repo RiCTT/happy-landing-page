@@ -29,6 +29,23 @@ export const BasicComponents = [
     name: "van-swipe-v2",
     label: "轮播",
     iconSrc: require("./images/coursel.png"),
+    props: {
+      autoplay: {
+        type: Boolean,
+        label: "自动播放",
+      },
+      loop: {
+        type: Boolean,
+        label: "开启循环",
+        default: true,
+      },
+      duration: {
+        type: Number,
+        label: "动画时长",
+        ui: "text",
+        default: 1000,
+      },
+    },
   },
   {
     name: "van-image",
