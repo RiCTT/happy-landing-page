@@ -8,10 +8,12 @@
       @config-select="handleConfigSelect"
     />
     <PropsForm
+      :pageSettings="currentPage.pageSettings"
       :form="currentProps"
       :data="currentPropsData"
       @data-change="handleDataChange"
       @submit="handleSaveSubmit"
+      @page-submit="handlePageFormSubmit"
     />
   </div>
 </template>
@@ -37,6 +39,7 @@ export default defineComponent({
     const router = useRouter();
     const pageId = computed(() => route.query.id);
 
+    const currentPage = ref({ pageSettings: {} });
     const currentProps = ref({});
     const currentPropsData = ref({});
 
@@ -177,7 +180,8 @@ export default defineComponent({
 
     if (pageId.value) {
       const pageList = getPageList();
-      const data = pageList.find((e) => String(e.id) === pageId.value);
+      const data: any = pageList.find((e) => String(e.id) === pageId.value);
+      currentPage.value = data;
       if (data) {
         console.log(data);
         console.log("find");
@@ -186,11 +190,20 @@ export default defineComponent({
       }
     }
 
+    const handlePageFormSubmit = (data) => {
+      console.log("pageform");
+      console.log(data);
+      currentPage.value.pageSettings = data;
+      handleSaveSubmit();
+    };
+
     return {
+      currentPage,
       configList,
       currentProps,
       currentPropsData,
       prefviewWrp,
+      handlePageFormSubmit,
       handleSaveSubmit,
       handleDataChange,
       handleConfigSelect,

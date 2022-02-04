@@ -27,15 +27,21 @@
         </a-form>
       </a-tab-pane>
       <a-tab-pane key="2" tab="动画效果">动画效果</a-tab-pane>
-      <a-tab-pane key="3" tab="其他">其他</a-tab-pane>
+      <a-tab-pane key="3" tab="其他">
+        <PageForm @page-submit="$emit('page-submit', $event)" />
+      </a-tab-pane>
     </a-tabs>
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent, ref, watch } from "vue";
+import PageForm from "./page-form.vue";
 
 export default defineComponent({
+  components: {
+    PageForm,
+  },
   props: {
     form: {
       type: Object,
@@ -89,6 +95,11 @@ export default defineComponent({
       { deep: true }
     );
 
+    const handlePageFormSubmit = (data) => {
+      console.log("pageform");
+      console.log(data);
+    };
+
     const onFinish = (value) => {
       console.log(value);
       ctx.emit("submit", value);
@@ -106,6 +117,7 @@ export default defineComponent({
       model,
       rules,
       activeKey,
+      handlePageFormSubmit,
       onFinish,
       onFinishFailed,
     };
