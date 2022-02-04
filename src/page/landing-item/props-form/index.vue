@@ -16,8 +16,10 @@
             :key="key"
             :label="val.label"
             :name="key"
+            :class="`form-item-${val.ui}`"
           >
             <a-input v-if="val.ui === 'text'" v-model:value="model[key]" />
+            <a-switch v-if="val.ui === 'switch'" v-model:checked="model[key]" />
           </a-form-item>
           <a-form-item>
             <a-button type="primary" html-type="submit">保存</a-button>
@@ -55,7 +57,12 @@ export default defineComponent({
         const rulesResult = {};
         Object.keys(val).forEach((key) => {
           const { default: initValue, required, validator } = val[key];
-          result[key] = propsData[key] || initValue || "";
+          const originVal = propsData[key];
+          if (typeof originVal === "boolean") {
+            result[key] = originVal;
+          } else {
+            result[key] = originVal || initValue || undefined;
+          }
           rulesResult[key] = [];
           if (required) {
             rulesResult[key].push({ required: true, message: "不能为空" });
@@ -119,5 +126,9 @@ export default defineComponent({
   padding: 10px;
   overflow: auto;
   scrollBar();
+}
+
+.form-item-switch {
+  text-align: left;
 }
 </style>

@@ -24,6 +24,7 @@ import { defineComponent, ref, computed } from "vue";
 import { message } from "ant-design-vue";
 import { getPageList, setPageList } from "./utils";
 import { useRoute, useRouter } from "vue-router";
+import { BasicComponents } from "./component-list/data";
 
 export default defineComponent({
   components: {
@@ -143,7 +144,9 @@ export default defineComponent({
     };
 
     const handleConfigSelect = (config) => {
-      const { props, data } = config;
+      const { data, name } = config;
+      const targetComp: any = BasicComponents.find((e) => e.name === name);
+      const { props } = targetComp;
       currentProps.value = props;
       currentPropsData.value = data;
     };

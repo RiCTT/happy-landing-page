@@ -31,13 +31,16 @@ export const BasicComponents = [
     iconSrc: require("./images/coursel.png"),
     props: {
       autoplay: {
-        type: Boolean,
-        label: "自动播放",
+        type: Number,
+        label: "自动轮播间隔",
+        ui: "text",
+        default: 2000,
       },
       loop: {
         type: Boolean,
         label: "开启循环",
-        default: true,
+        default: false,
+        ui: "switch",
       },
       duration: {
         type: Number,
