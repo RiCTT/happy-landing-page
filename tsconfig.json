@@ -18,7 +18,7 @@
     "paths": {
       "@/*": [
         "src/*"
-      ]
+      ],
     },
     "lib": [
       "esnext",
@@ -31,9 +31,12 @@
     "src/**/*.ts",
     "src/**/*.tsx",
     "src/**/*.vue",
+    "types/**/*.d.ts",
+    "types/**/*.ts",
     "tests/**/*.ts",
-    "tests/**/*.tsx"
-, "src/page/landing-list/hooks/useTable.js"  ],
+    "tests/**/*.tsx",
+    "src/page/landing-list/hooks/useTable.js"
+  ],
   "exclude": [
     "node_modules"
   ]

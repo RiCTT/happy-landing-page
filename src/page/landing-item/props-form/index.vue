@@ -11,15 +11,53 @@
           @finish="onFinish"
           @finishFailed="onFinishFailed"
         >
+          <!-- form是object类型 -->
           <a-form-item
             v-for="(val, key) in form"
             :key="key"
             :label="val.label"
-            :name="key"
+            :name="[key]"
             :class="`form-item-${val.ui}`"
           >
+            <!-- 自定义加减的组件，应该是array类型 -->
+            <template v-if="val.customAddAndSubtract">
+              <div
+                class="nested-form-item"
+                v-for="(subItem, $index) in model[key]"
+                :key="$index + 1"
+              >
+                <a-form-item
+                  v-for="(subVal, subKey) in val.typeInterface"
+                  :key="subKey"
+                  :label="subVal.label + ($index + 1)"
+                  :name="[key, $index, subKey]"
+                  :rules="getNestedRules(subVal)"
+                >
+                  <a-input
+                    v-if="subVal.ui === 'text'"
+                    v-model:value="model[key][$index][subKey]"
+                  />
+                </a-form-item>
+                <div class="nested-form-menu">
+                  <a-button
+                    type="text"
+                    @click="addNewItem(model[key], $index, val.typeInterface)"
+                    >添加</a-button
+                  >
+                  <a-button
+                    type="text"
+                    danger
+                    @click="removeItem(model[key], $index, val.typeInterface)"
+                    >删除</a-button
+                  >
+                </div>
+              </div>
+            </template>
             <a-input v-if="val.ui === 'text'" v-model:value="model[key]" />
             <a-switch v-if="val.ui === 'switch'" v-model:checked="model[key]" />
+            <p v-if="!val.ui && !val.customAddAndSubtract">
+              {{ val }}
+            </p>
           </a-form-item>
           <a-form-item>
             <a-button type="primary" html-type="submit">保存</a-button>
@@ -37,6 +75,7 @@
 <script lang="ts">
 import { defineComponent, ref, watch } from "vue";
 import PageForm from "./page-form.vue";
+import { formatPropsData } from "./utils";
 
 export default defineComponent({
   components: {
@@ -59,16 +98,10 @@ export default defineComponent({
       () => props.form,
       (val = {}) => {
         const propsData: any = props.data;
-        const result = {};
+        const result = formatPropsData(val, propsData);
         const rulesResult = {};
         Object.keys(val).forEach((key) => {
-          const { default: initValue, required, validator } = val[key];
-          const originVal = propsData[key];
-          if (typeof originVal === "boolean") {
-            result[key] = originVal;
-          } else {
-            result[key] = originVal || initValue || undefined;
-          }
+          const { required, validator } = val[key];
           rulesResult[key] = [];
           if (required) {
             rulesResult[key].push({ required: true, message: "不能为空" });
@@ -100,6 +133,26 @@ export default defineComponent({
       console.log(data);
     };
 
+    const getNestedRules = (subItem) => {
+      const rules: Array<RulesItem> = [];
+      const { required, validator } = subItem;
+      if (required) {
+        rules.push({ required: true, message: "不能为空" });
+      }
+      if (validator) {
+        rules.push({ validator });
+      }
+      return rules;
+    };
+
+    const addNewItem = (model, index) => {
+      model.splice(index + 1, 0, {});
+    };
+
+    const removeItem = (model, index) => {
+      model.splice(index, 1);
+    };
+
     const onFinish = (value) => {
       console.log(value);
       ctx.emit("submit", value);
@@ -118,6 +171,9 @@ export default defineComponent({
       rules,
       activeKey,
       handlePageFormSubmit,
+      getNestedRules,
+      addNewItem,
+      removeItem,
       onFinish,
       onFinishFailed,
     };
@@ -142,5 +198,9 @@ export default defineComponent({
 
 .form-item-switch {
   text-align: left;
+}
+
+.nested-form-item {
+  padding-left: 10px;
 }
 </style>

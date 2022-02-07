@@ -6,13 +6,13 @@ export const BasicComponents = [
     props: {
       text: {
         label: "按钮文本",
-        type: String,
+        type: "string",
         required: true,
         ui: "text",
         default: "按钮",
       },
       url: {
-        type: String,
+        type: "string",
         label: "跳转链接",
         ui: "text",
         default: "",
@@ -30,20 +30,49 @@ export const BasicComponents = [
     label: "轮播",
     iconSrc: require("./images/coursel.png"),
     props: {
+      images: {
+        type: "array",
+        customAddAndSubtract: true,
+        label: "图片列表",
+        typeInterface: {
+          src: {
+            label: "图片链接",
+            type: "string",
+            ui: "text",
+            validator: (rules, value) => {
+              console.log("valid!!");
+              console.log(value);
+              console.log(rules);
+              if (!value) {
+                return Promise.reject("图片不能为空");
+              }
+              return Promise.resolve();
+            },
+          },
+        },
+        default: [
+          {
+            src: "https://tse1-mm.cn.bing.net/th/id/R-C.9ddfed8e610becdbf648aea893a446c8?rik=IIWdIDd6UKLKOw&riu=http%3a%2f%2fwww.gplcw.com%2fUploadFiles%2f2013%2f2%2f20131212114521233.jpg&ehk=1ZCnzBipwCb8CzY%2blmcTuJ8urPYashFDBxn%2fyHeLHlo%3d&risl=&pid=ImgRaw&r=0",
+          },
+          {
+            src: "https://img.yzcdn.cn/vant/apple-2.jpg",
+          },
+        ],
+      },
       autoplay: {
-        type: Number,
+        type: "number",
         label: "自动轮播间隔",
         ui: "text",
         default: 2000,
       },
       loop: {
-        type: Boolean,
+        type: "boolean",
         label: "开启循环",
-        default: false,
+        default: true,
         ui: "switch",
       },
       duration: {
-        type: Number,
+        type: "number",
         label: "动画时长",
         ui: "text",
         default: 1000,
@@ -56,7 +85,7 @@ export const BasicComponents = [
     iconSrc: require("./images/image.png"),
     props: {
       src: {
-        type: String,
+        type: "string",
         label: "图片链接",
         ui: "text",
         required: true,
@@ -73,4 +102,15 @@ export const BasicComponents = [
     label: "分割线",
     iconSrc: require("./images/divider.png"),
   },
-];
+].map((e) => {
+  const obj = e;
+  const data = {};
+  if (e.props) {
+    Object.keys(e.props).forEach((key) => {
+      const prop = e.props[key];
+      data[key] = prop.default;
+    });
+  }
+  obj.data = data;
+  return obj;
+});
