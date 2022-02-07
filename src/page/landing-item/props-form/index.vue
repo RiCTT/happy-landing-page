@@ -186,9 +186,10 @@ export default defineComponent({
 
 .props-form-wrapper {
   width: 30%;
-  max-width: 400px;
-  min-width: 300px;
+  max-width: 500px;
+  min-width: 400px;
   height: 100%;
+  min-height: 667px;
   background-color: #fff;
   box-sizing: border-box;
   padding: 10px;

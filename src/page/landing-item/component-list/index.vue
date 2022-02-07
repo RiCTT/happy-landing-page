@@ -42,6 +42,7 @@ export default defineComponent({
   width: 300px;
   background-color: #fff;
   height: 100%;
+  min-height: 667px;
   overflow: auto;
   box-sizing: border-box;
   padding: 10px;
