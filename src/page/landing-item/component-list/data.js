@@ -102,6 +102,11 @@ export const BasicComponents = [
     label: "分割线",
     iconSrc: require("./images/divider.png"),
   },
+  {
+    name: "van-form-v2",
+    label: "表单",
+    iconSrc: require("./images/form.png"),
+  },
 ].map((e) => {
   const obj = e;
   const data = {};
