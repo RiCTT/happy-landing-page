@@ -19,6 +19,11 @@ module.exports = {
     "@typescript-eslint/explicit-module-boundary-types": "off",
     "@typescript-eslint/no-empty-function": "off",
     "@typescript-eslint/no-explicit-any": "off",
-    "no-undef": "warn"
+    "no-undef": "warn",
+    // 传递给prettier的选项
+    // https://github.com/prettier/eslint-plugin-prettier#options
+    "prettier/prettier": ["warn", {
+      "htmlWhitespaceSensitivity": "ignore"
+    }]
   },
 };
