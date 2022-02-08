@@ -106,6 +106,52 @@ export const BasicComponents = [
     name: "van-form-v2",
     label: "表单",
     iconSrc: require("./images/form.png"),
+    props: {
+      fields: {
+        isFormControl: true,
+        type: "array",
+        label: "表单控件",
+        typeInterface: {
+          ui: {
+            type: "string",
+            label: "控件类型",
+            default: "text",
+          },
+          key: {
+            type: "string",
+            label: "英文字段名称（提交关联字段）",
+          },
+          label: {
+            type: "string",
+            label: "字段名称",
+          },
+          required: {
+            type: "boolean",
+            label: "是否必填",
+          },
+          options: {
+            type: "array",
+            label: "选项",
+          },
+        },
+        default: [
+          {
+            ui: "text",
+            key: "username",
+            label: "姓名",
+            required: true,
+            rules: [{ required: true, message: "请填写用户名" }],
+          },
+          {
+            ui: "password",
+            key: "password",
+            label: "密码",
+            required: true,
+            rules: [{ required: true, message: "请填写密码" }],
+          },
+        ],
+      },
+    },
   },
 ].map((e) => {
   const obj = e;
@@ -118,4 +164,18 @@ export const BasicComponents = [
   }
   obj.data = data;
   return obj;
+});
+
+// eslint-disable-next-line prettier/prettier
+export const fields = [
+  { ui: "text", label: "普通文本" },
+  { ui: "password", label: "密码框" },
+  { ui: "switch", label: "开关" },
+];
+
+export const fieldsOps = fields.map((e) => {
+  return {
+    label: e.label,
+    value: e.ui,
+  };
 });

@@ -174,7 +174,6 @@ export default defineComponent({
       target.style.left = resultX + "px";
       target.style.top = resultY + "px";
       console.log("drag move");
-      console.log(JSON.stringify(props.configList));
     };
 
     const onConfigItemMouseUp = () => {
@@ -188,7 +187,7 @@ export default defineComponent({
       mouseState.value.lastOffsetY = 0;
       mouseState.value.ele = null;
       console.log("drag end");
-      console.log(JSON.stringify(props.configList));
+      // console.log(JSON.stringify(props.configList));
       const list = getConfigList();
       ctx.emit("config-change", list);
       return false;

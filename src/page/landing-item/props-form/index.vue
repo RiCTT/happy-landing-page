@@ -42,22 +42,53 @@
                   <a-button
                     type="text"
                     @click="addNewItem(model[key], $index, val.typeInterface)"
-                    >添加</a-button
                   >
+                    添加
+                  </a-button>
                   <a-button
                     type="text"
                     danger
                     @click="removeItem(model[key], $index, val.typeInterface)"
-                    >删除</a-button
                   >
+                    删除
+                  </a-button>
+                </div>
+              </div>
+            </template>
+            <!-- 表单控件 -->
+            <template v-if="val.isFormControl">
+              <div v-if="model[key]" class="field-wrapper">
+                <div
+                  v-for="field in model[key]"
+                  class="field-item"
+                  :key="field.key"
+                >
+                  <minus-circle-filled
+                    :style="{ fontSize: '18px', cursor: 'pointer' }"
+                  />
+                  <span class="field-item-label">{{ field.label }}</span>
+                  <arrow-up-outlined
+                    :style="{
+                      fontSize: '18px',
+                      marginRight: '10px',
+                      cursor: 'pointer',
+                    }"
+                  />
+                  <edit-filled
+                    @click="onClikEditIcon(field)"
+                    :style="{ fontSize: '18px', cursor: 'pointer' }"
+                  />
+                </div>
+                <div>
+                  <a-button round block @click="addFormField">添加</a-button>
                 </div>
               </div>
             </template>
             <a-input v-if="val.ui === 'text'" v-model:value="model[key]" />
             <a-switch v-if="val.ui === 'switch'" v-model:checked="model[key]" />
-            <p v-if="!val.ui && !val.customAddAndSubtract">
+            <!-- <p v-if="!val.ui && !val.customAddAndSubtract">
               {{ val }}
-            </p>
+            </p> -->
           </a-form-item>
           <a-form-item>
             <a-button type="primary" html-type="submit">保存</a-button>
@@ -69,17 +100,33 @@
         <PageForm @page-submit="$emit('page-submit', $event)" />
       </a-tab-pane>
     </a-tabs>
+
+    <FieldsModalForm
+      v-model="modalVisible"
+      :field="currentField"
+      @on-save="handleFieldsModalFormSave"
+    />
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent, ref, watch } from "vue";
 import PageForm from "./page-form.vue";
+import FieldsModalForm from "./fields-modal-form.vue";
 import { formatPropsData } from "./utils";
+import {
+  MinusCircleFilled,
+  ArrowUpOutlined,
+  EditFilled,
+} from "@ant-design/icons-vue";
 
 export default defineComponent({
   components: {
     PageForm,
+    FieldsModalForm,
+    MinusCircleFilled,
+    ArrowUpOutlined,
+    EditFilled,
   },
   props: {
     form: {
@@ -91,8 +138,10 @@ export default defineComponent({
   },
   setup(props, ctx) {
     const activeKey = ref("1");
-    const model = ref({});
+    const model: any = ref({});
     const rules = ref({});
+    const modalVisible = ref(false);
+    const currentField = ref({});
 
     watch(
       () => props.form,
@@ -166,14 +215,46 @@ export default defineComponent({
       console.log("error");
     };
 
+    const onClikEditIcon = (field) => {
+      console.log(field);
+      if (!field.id) {
+        field.id = Date.now();
+      }
+      currentField.value = { ...field };
+      modalVisible.value = true;
+    };
+
+    const addFormField = () => {
+      currentField.value = {};
+      modalVisible.value = true;
+    };
+
+    const handleFieldsModalFormSave = (data) => {
+      console.log("model");
+      const fields = model.value.fields;
+      const { id } = data;
+      const index = fields.findIndex(
+        (e) => e.id && Number(e.id) === Number(id)
+      );
+      if (index !== -1) {
+        model.value.fields.splice(index, 1, { ...fields[index], ...data });
+      }
+      console.log(model.value);
+    };
+
     return {
       model,
       rules,
       activeKey,
+      modalVisible,
+      currentField,
       handlePageFormSubmit,
       getNestedRules,
       addNewItem,
       removeItem,
+      onClikEditIcon,
+      handleFieldsModalFormSave,
+      addFormField,
       onFinish,
       onFinishFailed,
     };
@@ -203,5 +284,22 @@ export default defineComponent({
 
 .nested-form-item {
   padding-left: 10px;
+}
+
+.field-wrapper {
+  padding: 0 10px;
+  .field-item {
+    display: flex;
+    align-items: center;
+    padding: 6px 0;
+    border-bottom: 1px solid #f2f2f2;
+
+    .field-item-label {
+      padding: 0 20px;
+      flex: 1;
+      text-align: left;
+      font-size: 16px;
+    }
+  }
 }
 </style>

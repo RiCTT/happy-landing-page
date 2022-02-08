@@ -122,6 +122,7 @@ export default defineComponent({
         const index = list.findIndex((e) => String(e.id) === pageId.value);
         const data = list[index];
         data.configList = configList.value;
+        console.log(data);
         setPageList(list);
       }
       message.info("保存成功");
