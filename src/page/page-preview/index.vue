@@ -1,6 +1,8 @@
 <template>
   <div class="preview-wrapper">
-    <HappyPreview :configList="configList" mode="show" />
+    <div class="preview-inner" :style="{ height: settings.pageHeight }">
+      <HappyPreview :configList="configList" mode="show" />
+    </div>
   </div>
 </template>
 
@@ -15,6 +17,7 @@ export default defineComponent({
   },
   setup() {
     const configList = ref([]);
+    const settings = ref({});
     const route = useRoute();
     const pageId = computed(() => route.query.id);
     if (pageId.value) {
@@ -23,12 +26,14 @@ export default defineComponent({
       if (data) {
         console.log(data);
         console.log("find");
-        const { configList: result } = data;
+        const { configList: result, settings: originSettings } = data;
         configList.value = result;
+        settings.value = originSettings;
       }
     }
     return {
       configList,
+      settings,
     };
   },
 });
@@ -38,5 +43,15 @@ export default defineComponent({
 .preview-wrapper {
   width: 100%;
   height: 100%;
+  max-height: 667px;
+  overflow: auto;
+  .preview-inner {
+    max-width: 375px;
+    width: 100%;
+    height: 100%;
+    margin: 40px auto;
+    background-color: #fff;
+    overflow: auto;
+  }
 }
 </style>

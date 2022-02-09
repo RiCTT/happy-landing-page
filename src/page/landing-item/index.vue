@@ -1,13 +1,19 @@
 <template>
   <div class="landing-item-wrapper">
     <ComponentList @add-component="handleAddComponent" />
-    <PreviewWrapper
-      ref="prefviewWrp"
-      :configList="configList"
-      :pageHeight="settings.pageHeight"
-      @config-change="handleConfigChange"
-      @config-select="handleConfigSelect"
-    />
+    <div>
+      <div class="landing-item-operation">
+        <a-button @click="goBackToList">返回列表</a-button>
+        <a-button type="primary" @click="goToPreview">预览页面</a-button>
+      </div>
+      <PreviewWrapper
+        ref="prefviewWrp"
+        :configList="configList"
+        :pageHeight="settings.pageHeight"
+        @config-change="handleConfigChange"
+        @config-select="handleConfigSelect"
+      />
+    </div>
     <PropsForm
       :pageSettings="currentPage.pageSettings"
       :form="currentProps"
@@ -151,6 +157,17 @@ export default defineComponent({
       handleSaveSubmit();
     };
 
+    const goBackToList = () => {
+      router.push({
+        name: "LandingList",
+      });
+    };
+
+    const goToPreview = () => {
+      const url = window.location.origin + `/page-preview?id=${pageId.value}`;
+      window.open(url, "_blank");
+    };
+
     return {
       currentPage,
       configList,
@@ -158,6 +175,8 @@ export default defineComponent({
       currentProps,
       currentPropsData,
       prefviewWrp,
+      goBackToList,
+      goToPreview,
       handlePageFormSubmit,
       handleSaveSubmit,
       handleDataChange,
@@ -175,5 +194,15 @@ export default defineComponent({
   justify-content: space-between;
   margin-top: 20px;
   height: calc(100vh - 80px);
+}
+
+.landing-item-operation {
+  margin-bottom: 6px;
+  >>> .ant-btn {
+    margin-right: 10px;
+    &::last-child {
+      margin-right: 0;
+    }
+  }
 }
 </style>
