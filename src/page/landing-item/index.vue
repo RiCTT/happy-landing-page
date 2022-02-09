@@ -4,6 +4,7 @@
     <PreviewWrapper
       ref="prefviewWrp"
       :configList="configList"
+      :pageHeight="settings.pageHeight"
       @config-change="handleConfigChange"
       @config-select="handleConfigSelect"
     />
@@ -44,66 +45,15 @@ export default defineComponent({
     const currentPropsData = ref({});
 
     const prefviewWrp = ref();
-    const configList: any = ref([
-      // {
-      //   id: 11111,
-      //   name: "van-divider",
-      //   data: {
-      //     dashed: true,
-      //   },
-      // },
-      // {
-      //   id: 2222,
-      //   name: "van-swipe-v2",
-      //   data: {
-      //     autoplay: 3000,
-      //     images: [
-      //       {
-      //         src: "https://img.yzcdn.cn/vant/apple-1.jpg",
-      //       },
-      //       {
-      //         src: "https://tse1-mm.cn.bing.net/th/id/R-C.a84831186bddfe9b44ca645f0a8c021b?rik=mVmIauj3YmAFmA&riu=http%3a%2f%2fimgx.xiawu.com%2fxzimg%2fi3%2f291799040%2fTB2WvkEEER1BeNjy0FmXXb0wVXa_!!291799040-0-item_pic.jpg&ehk=rTrMzjXT9yEy8ElfC5OjPXscZ35Sk93tYB5iNxWbWSI%3d&risl=&pid=ImgRaw&r=0",
-      //       },
-      //     ],
-      //   },
-      //   style: {
-      //     height: "200px",
-      //   },
-      // },
-      // {
-      //   id: 123,
-      //   name: "van-button",
-      //   data: {
-      //     text: "按钮",
-      //   },
-      //   style: {
-      //     left: "10px",
-      //     top: "100px",
-      //   },
-      // },
-      // {
-      //   id: 456,
-      //   name: "van-image",
-      //   data: {
-      //     src: "https://image.huanghepiao.com/images/upload/20191224/15771484951260.jpg",
-      //   },
-      //   style: {
-      //     left: "100px",
-      //     top: "200px",
-      //   },
-      // },
-      // {
-      //   id: 789,
-      //   name: "van-image",
-      //   data: {
-      //     src: "https://tse1-mm.cn.bing.net/th/id/R-C.a84831186bddfe9b44ca645f0a8c021b?rik=mVmIauj3YmAFmA&riu=http%3a%2f%2fimgx.xiawu.com%2fxzimg%2fi3%2f291799040%2fTB2WvkEEER1BeNjy0FmXXb0wVXa_!!291799040-0-item_pic.jpg&ehk=rTrMzjXT9yEy8ElfC5OjPXscZ35Sk93tYB5iNxWbWSI%3d&risl=&pid=ImgRaw&r=0",
-      //   },
-      //   style: {
-      //     left: "210px",
-      //     top: "140px",
-      //   },
-      // },
-    ]);
+    const configList: any = ref([]);
+    const settings = ref({ pageHeight: "100%" });
+
+    const getSettingsData = (data?) => {
+      const result = data ? Object.assign(data) : {};
+      const pageHeight = prefviewWrp.value.boxHeight;
+      result.pageHeight = pageHeight;
+      return result;
+    };
 
     const handleSaveSubmit = () => {
       const list = getPageList();
@@ -111,6 +61,7 @@ export default defineComponent({
         const id = Date.now();
         const page = {
           id,
+          settings: getSettingsData(),
           configList: [...configList.value],
         };
         list.push(page);
@@ -122,6 +73,7 @@ export default defineComponent({
         const index = list.findIndex((e) => String(e.id) === pageId.value);
         const data = list[index];
         data.configList = configList.value;
+        data.settings = getSettingsData(data.settings);
         console.log(data);
         setPageList(list);
       }
@@ -184,10 +136,11 @@ export default defineComponent({
       const data: any = pageList.find((e) => String(e.id) === pageId.value);
       currentPage.value = data;
       if (data) {
+        console.log("find item !");
         console.log(data);
-        console.log("find");
-        const { configList: result } = data;
+        const { configList: result, settings: originSettings } = data;
         configList.value = result;
+        settings.value = originSettings || { pageHeight: "100%" };
       }
     }
 
@@ -201,6 +154,7 @@ export default defineComponent({
     return {
       currentPage,
       configList,
+      settings,
       currentProps,
       currentPropsData,
       prefviewWrp,

@@ -17,13 +17,21 @@
       <a-form-item label="控件名称" name="label">
         <a-input v-model:value="model.label" />
       </a-form-item>
-      <a-form-item label="提示文本" name="placeholder">
+      <a-form-item
+        v-if="showItem(['text', 'password'])"
+        label="提示文本"
+        name="placeholder"
+      >
         <a-input v-model:value="model.placeholder" />
       </a-form-item>
       <a-form-item label="是否必填" name="required">
         <a-switch v-model:checked="model.required" />
       </a-form-item>
-      <a-form-item label="选项" name="options">
+      <a-form-item
+        v-if="showItem(['checkbox', 'radio'])"
+        label="选项"
+        name="options"
+      >
         <div v-if="model.options">
           <a-input
             style="margin-bottom: 10px"
@@ -46,8 +54,6 @@
         Submit
       </a-button>
     </template>
-    <p>field!</p>
-    {{ field }}
   </a-modal>
 </template>
 
@@ -91,6 +97,14 @@ export default defineComponent({
       }
     );
 
+    const showItem = (flags: string[]) => {
+      const ui: string = model.value.ui;
+      if (!ui) {
+        return false;
+      }
+      return flags.indexOf(ui) > -1;
+    };
+
     const handleCancel = () => {
       loading.value = false;
       visible.value = false;
@@ -120,6 +134,7 @@ export default defineComponent({
       visible,
       loading,
       addOption,
+      showItem,
       handleCancel,
       handleOk,
     };

@@ -3,30 +3,16 @@
     <template v-for="field in fields" :key="field.key">
       <van-field
         v-if="field.ui === 'text'"
-        :label="field.label"
-        :key="field.ui"
+        v-bind="getFieldAttrs(field)"
         v-model="model[field.key]"
-        :required="field.required"
-        :rules="getFieldRules(field)"
-        :placeholder="field.placeholder"
       ></van-field>
       <van-field
         v-if="field.ui === 'password'"
         type="password"
-        :key="field.ui"
-        :label="field.label"
-        :required="field.required"
+        v-bind="getFieldAttrs(field)"
         v-model="model[field.key]"
-        :rules="getFieldRules(field)"
-        :placeholder="field.placeholder"
       ></van-field>
-      <van-field
-        v-if="field.ui === 'checkbox'"
-        :label="field.label"
-        :key="field.ui"
-        :required="field.required"
-        :rules="getFieldRules(field)"
-      >
+      <van-field v-if="field.ui === 'checkbox'" v-bind="getFieldAttrs(field)">
         <template #input>
           <van-checkbox-group v-model="model[field.key]" direction="horizontal">
             <template v-if="field.options">
@@ -44,10 +30,8 @@
 
       <van-field
         v-if="field.ui === 'radio'"
+        v-bind="getFieldAttrs(field)"
         name="radio"
-        :rules="getFieldRules(field)"
-        :required="field.required"
-        :label="field.label"
       >
         <template #input>
           <van-radio-group v-model="model[field.key]" direction="horizontal">
@@ -60,21 +44,6 @@
         </template>
       </van-field>
     </template>
-    <!-- <van-field
-      v-model="model.username"
-      name="用户名"
-      label="用户名"
-      placeholder="用户名"
-      :rules="[{ required: true, message: '请填写用户名' }]"
-    />
-    <van-field
-      v-model="model.password"
-      type="password"
-      name="密码"
-      label="密码"
-      placeholder="密码"
-      :rules="[{ required: true, message: '请填写密码' }]"
-    /> -->
     <div style="margin: 16px">
       <van-button round block type="primary" native-type="submit">
         提交
@@ -100,8 +69,20 @@ export default defineComponent({
       console.log("submit", model.value);
     };
 
+    const getFieldAttrs = (field) => {
+      const { ui, label, key, placeholder, required } = field;
+      const attrs: any = { label, key, ui, placeholder, required };
+      if (ui === "password") {
+        attrs.type = "password";
+      }
+      attrs.rules = getFieldRules(field);
+
+      return attrs;
+    };
+
     const getFieldRules = (field) => {
       const { required, validator } = field;
+      // eslint-disable-next-line no-undef
       const rules: Array<RulesItem> = [];
       if (required) {
         rules.push({ required: true, message: "不能为空" });
@@ -109,12 +90,12 @@ export default defineComponent({
       if (validator) {
         rules.push({ validator });
       }
-      console.log(rules);
       return rules;
     };
     return {
       model,
       onSubmit,
+      getFieldAttrs,
       getFieldRules,
     };
   },

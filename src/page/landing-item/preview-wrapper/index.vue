@@ -30,7 +30,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, onMounted } from "vue";
+import { defineComponent, ref, onMounted, watch } from "vue";
 import HappyPreview from "@/components/happy-preview/index.vue";
 import {
   UpCircleTwoTone,
@@ -46,6 +46,10 @@ export default defineComponent({
       type: Array,
       default: () => [],
     },
+    pageHeight: {
+      type: String,
+      default: "100%",
+    },
   },
   components: {
     HappyPreview,
@@ -57,8 +61,15 @@ export default defineComponent({
   },
   setup(props, ctx) {
     const previewWrp: any = ref({});
-    const boxHeight = ref("100%");
+    const boxHeight = ref(props.pageHeight);
     const twoToneColor = ref("#ff8000");
+
+    watch(
+      () => props.pageHeight,
+      (val) => {
+        boxHeight.value = val;
+      }
+    );
 
     // 提高层级
     const onMoveUpBtn = () => {
@@ -124,7 +135,9 @@ export default defineComponent({
 
     onMounted(() => {
       const el = previewWrp.value.$el;
-      boxHeight.value = el.offsetHeight + "px";
+      if (props.pageHeight === "100%") {
+        boxHeight.value = el.offsetHeight + "px";
+      }
     });
     return {
       boxHeight,
