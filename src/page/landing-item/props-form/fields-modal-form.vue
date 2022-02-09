@@ -1,16 +1,5 @@
 <template>
   <a-modal v-model:visible="visible" title="表单组件属性">
-    <template #footer>
-      <a-button key="back" @click="handleCancel">Return</a-button>
-      <a-button
-        key="submit"
-        type="primary"
-        :loading="loading"
-        @click="handleOk"
-      >
-        Submit
-      </a-button>
-    </template>
     <a-form
       :model="model"
       :rules="rules"
@@ -46,6 +35,17 @@
         <a-button type="primary" @click="addOption">新增选项</a-button>
       </a-form-item>
     </a-form>
+    <template #footer>
+      <a-button key="back" @click="handleCancel">Return</a-button>
+      <a-button
+        key="submit"
+        type="primary"
+        :loading="loading"
+        @click="handleOk"
+      >
+        Submit
+      </a-button>
+    </template>
     <p>field!</p>
     {{ field }}
   </a-modal>

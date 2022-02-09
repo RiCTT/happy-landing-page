@@ -149,6 +149,20 @@ export const BasicComponents = [
             required: true,
             rules: [{ required: true, message: "请填写密码" }],
           },
+          {
+            ui: "checkbox",
+            key: "city",
+            label: "所在城市",
+            required: true,
+            options: ["广州", "佛山", "厦门", "福州", "苏州", "扬州"],
+          },
+          {
+            ui: "radio",
+            key: "gender",
+            label: "性别",
+            required: true,
+            options: ["男", "女", "未知"],
+          },
         ],
       },
     },
@@ -171,6 +185,8 @@ export const fields = [
   { ui: "text", label: "普通文本" },
   { ui: "password", label: "密码框" },
   { ui: "switch", label: "开关" },
+  { ui: "checkbox", label: "复选框" },
+  { ui: "radio", label: "单选框" },
 ];
 
 export const fieldsOps = fields.map((e) => {

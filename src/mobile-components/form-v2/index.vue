@@ -6,6 +6,8 @@
         :label="field.label"
         :key="field.ui"
         v-model="model[field.key]"
+        :required="field.required"
+        :rules="getFieldRules(field)"
         :placeholder="field.placeholder"
       ></van-field>
       <van-field
@@ -13,9 +15,50 @@
         type="password"
         :key="field.ui"
         :label="field.label"
+        :required="field.required"
         v-model="model[field.key]"
+        :rules="getFieldRules(field)"
         :placeholder="field.placeholder"
       ></van-field>
+      <van-field
+        v-if="field.ui === 'checkbox'"
+        :label="field.label"
+        :key="field.ui"
+        :required="field.required"
+        :rules="getFieldRules(field)"
+      >
+        <template #input>
+          <van-checkbox-group v-model="model[field.key]" direction="horizontal">
+            <template v-if="field.options">
+              <van-checkbox
+                v-for="(op, i) in field.options"
+                :key="i"
+                :name="op"
+              >
+                {{ op }}
+              </van-checkbox>
+            </template>
+          </van-checkbox-group>
+        </template>
+      </van-field>
+
+      <van-field
+        v-if="field.ui === 'radio'"
+        name="radio"
+        :rules="getFieldRules(field)"
+        :required="field.required"
+        :label="field.label"
+      >
+        <template #input>
+          <van-radio-group v-model="model[field.key]" direction="horizontal">
+            <template v-if="field.options">
+              <van-radio v-for="(op, i) in field.options" :name="op" :key="i">
+                {{ op }}
+              </van-radio>
+            </template>
+          </van-radio-group>
+        </template>
+      </van-field>
     </template>
     <!-- <van-field
       v-model="model.username"
@@ -56,12 +99,30 @@ export default defineComponent({
     const onSubmit = () => {
       console.log("submit", model.value);
     };
+
+    const getFieldRules = (field) => {
+      const { required, validator } = field;
+      const rules: Array<RulesItem> = [];
+      if (required) {
+        rules.push({ required: true, message: "不能为空" });
+      }
+      if (validator) {
+        rules.push({ validator });
+      }
+      console.log(rules);
+      return rules;
+    };
     return {
       model,
       onSubmit,
+      getFieldRules,
     };
   },
 });
 </script>
 
-<style lang="stylus" scoped></style>
+<style lang="stylus" scoped>
+>>> .van-checkbox--horizontal {
+  margin-bottom: 8px;
+}
+</style>

@@ -233,11 +233,15 @@ export default defineComponent({
       console.log("model");
       const fields = model.value.fields;
       const { id } = data;
-      const index = fields.findIndex(
-        (e) => e.id && Number(e.id) === Number(id)
-      );
-      if (index !== -1) {
-        model.value.fields.splice(index, 1, { ...fields[index], ...data });
+      if (!id) {
+        model.value.fields.push({ id: Date.now(), ...data });
+      } else {
+        const index = fields.findIndex(
+          (e) => e.id && Number(e.id) === Number(id)
+        );
+        if (index !== -1) {
+          model.value.fields.splice(index, 1, { ...fields[index], ...data });
+        }
       }
       console.log(model.value);
     };
