@@ -183,6 +183,7 @@ export default defineComponent({
     };
 
     const getNestedRules = (subItem) => {
+      // eslint-disable-next-line no-undef
       const rules: Array<RulesItem> = [];
       const { required, validator } = subItem;
       if (required) {

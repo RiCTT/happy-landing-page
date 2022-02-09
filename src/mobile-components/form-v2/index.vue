@@ -27,7 +27,6 @@
           </van-checkbox-group>
         </template>
       </van-field>
-
       <van-field
         v-if="field.ui === 'radio'"
         v-bind="getFieldAttrs(field)"
@@ -43,7 +42,22 @@
           </van-radio-group>
         </template>
       </van-field>
+      <van-field
+        v-if="field.ui === 'select'"
+        v-model="model[field.key]"
+        v-bind="getFieldAttrs(field)"
+        @click="onSelectFieldClick(field)"
+      ></van-field>
     </template>
+
+    <van-popup v-model:show="showPicker" position="bottom">
+      <van-picker
+        :columns="pickerColumns"
+        @confirm="onPickerConfirm"
+        @cancel="showPicker = false"
+      />
+    </van-popup>
+
     <div style="margin: 16px">
       <van-button round block type="primary" native-type="submit">
         提交
@@ -65,8 +79,22 @@ export default defineComponent({
   },
   setup() {
     const model = ref({});
+    const showPicker = ref(false);
+    const pickerColumns = ref([]);
+    const currentPickerField = ref("");
     const onSubmit = () => {
       console.log("submit", model.value);
+    };
+    const onPickerConfirm = (value) => {
+      console.log(currentPickerField.value);
+      model.value[currentPickerField.value] = value;
+      showPicker.value = false;
+    };
+    const onSelectFieldClick = (field) => {
+      const { options, key } = field;
+      currentPickerField.value = key;
+      pickerColumns.value = options;
+      showPicker.value = true;
     };
 
     const getFieldAttrs = (field) => {
@@ -74,6 +102,10 @@ export default defineComponent({
       const attrs: any = { label, key, ui, placeholder, required };
       if (ui === "password") {
         attrs.type = "password";
+      }
+      if (ui === "select") {
+        attrs.name = "picker";
+        attrs.readonly = true;
       }
       attrs.rules = getFieldRules(field);
 
@@ -94,7 +126,12 @@ export default defineComponent({
     };
     return {
       model,
+      showPicker,
+      pickerColumns,
+      currentPickerField,
       onSubmit,
+      onPickerConfirm,
+      onSelectFieldClick,
       getFieldAttrs,
       getFieldRules,
     };

@@ -7,7 +7,10 @@
       name="basic"
       autocomplete="off"
     >
-      <a-form-item label="控件类型" name="ui">
+      <a-form-item label="控件key" name="key" required>
+        <a-input v-model:value="model.key" />
+      </a-form-item>
+      <a-form-item label="控件类型" name="ui" required>
         <a-select
           v-model:value="model.ui"
           style="width: 200px"
@@ -28,7 +31,7 @@
         <a-switch v-model:checked="model.required" />
       </a-form-item>
       <a-form-item
-        v-if="showItem(['checkbox', 'radio'])"
+        v-if="showItem(['checkbox', 'radio', 'select'])"
         label="选项"
         name="options"
       >

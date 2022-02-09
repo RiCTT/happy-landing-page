@@ -185,6 +185,7 @@ export const fields = [
   { ui: "text", label: "普通文本" },
   { ui: "password", label: "密码框" },
   { ui: "switch", label: "开关" },
+  { ui: "select", label: "下拉单选框" },
   { ui: "checkbox", label: "复选框" },
   { ui: "radio", label: "单选框" },
 ];
