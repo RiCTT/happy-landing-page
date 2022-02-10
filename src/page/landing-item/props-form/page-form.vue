@@ -22,9 +22,15 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from "vue";
+import { defineComponent, ref, watch } from "vue";
 
 export default defineComponent({
+  props: {
+    settings: {
+      type: Object,
+      default: () => {},
+    },
+  },
   setup(props, ctx) {
     const model = ref({});
     const rules = ref({});
@@ -32,6 +38,16 @@ export default defineComponent({
     const onFinish = (value) => {
       ctx.emit("page-submit", value);
     };
+
+    watch(
+      () => props.settings,
+      (val) => {
+        model.value = val || {};
+      },
+      {
+        immediate: true,
+      }
+    );
 
     return {
       model,

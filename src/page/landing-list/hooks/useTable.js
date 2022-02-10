@@ -6,12 +6,12 @@ export const useTable = () => {
   const columns = ref([
     {
       title: "落地页名称",
-      dataIndex: "name",
-      key: "name",
+      dataIndex: "settings.title",
+      key: "title",
     },
     {
       title: "落地页ID",
-      dataIndex: "id",
+      dataIndex: "_id",
     },
     {
       title: "访问量",
@@ -61,7 +61,7 @@ export const useTable = () => {
           router.push({
             name: "LandingItem",
             query: {
-              id: record.id,
+              id: record._id,
             },
           });
         };

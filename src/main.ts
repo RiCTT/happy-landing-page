@@ -10,7 +10,6 @@ import "ant-design-vue/dist/antd.css";
 import registerMobileComponents from "@/mobile-components/index";
 
 const app = createApp(App);
-
 app.use(router).mount("#app");
 app.use(vant);
 app.use(Antd);

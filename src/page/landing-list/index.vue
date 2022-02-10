@@ -19,7 +19,7 @@ import HappyTable from "@/components/happy-table/index.vue";
 import { defineComponent, onMounted, reactive, ref } from "vue";
 import { useTable } from "./hooks/useTable.js";
 import { useQuery } from "./hooks/useQuery.js";
-import { getPageList } from "../landing-item/utils";
+import { getPageList } from "@/api/landing-page";
 import { useRouter } from "vue-router";
 
 export default defineComponent({
@@ -42,27 +42,32 @@ export default defineComponent({
 
     const onQuery = () => {
       console.log(queryModel.value);
-      console.log(getPageList());
-      console.log("getPageList");
       setState("loading", true);
-      setTimeout(() => {
-        const data = getPageList().map((e, i) => {
-          return {
-            ...e,
-            visitor: Math.round(Math.random() * 100000),
-            key: i + 1 + "S",
-            name: "胡彦斌" + i + "号",
-            time: Math.round(Math.random() * 100),
-            updateTime: new Date().toLocaleDateString(),
-            age: i + Math.random() * 10,
-            status: Math.random() > 0.5 ? "pink" : "blue",
-            address: "西湖区湖底公园1号" + i,
-          };
+      getPageList()
+        .then((res: any) => {
+          console.log(res);
+          const { list, total } = res;
+          setState(
+            "data",
+            list.map((e, i) => {
+              return {
+                ...e,
+                visitor: Math.round(Math.random() * 100000),
+                key: i + 1 + "S",
+                name: "胡彦斌" + i + "号",
+                time: Math.round(Math.random() * 100),
+                updateTime: new Date().toLocaleDateString(),
+                age: i + Math.random() * 10,
+                status: Math.random() > 0.5 ? "pink" : "blue",
+                address: "西湖区湖底公园1号" + i,
+              };
+            })
+          );
+          setState("total", total || list.length);
+        })
+        .finally(() => {
+          setState("loading", false);
         });
-        setState("data", data);
-        setState("total", 1200);
-        setState("loading", false);
-      }, 1500);
     };
 
     const goToCreate = () => {

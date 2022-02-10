@@ -97,7 +97,10 @@
       </a-tab-pane>
       <a-tab-pane key="2" tab="动画效果">动画效果</a-tab-pane>
       <a-tab-pane key="3" tab="其他">
-        <PageForm @page-submit="$emit('page-submit', $event)" />
+        <PageForm
+          :settings="settings"
+          @page-submit="$emit('page-submit', $event)"
+        />
       </a-tab-pane>
     </a-tabs>
 
@@ -133,6 +136,9 @@ export default defineComponent({
       type: Object,
     },
     data: {
+      type: Object,
+    },
+    settings: {
       type: Object,
     },
   },

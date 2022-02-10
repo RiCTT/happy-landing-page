@@ -15,7 +15,7 @@
       />
     </div>
     <PropsForm
-      :pageSettings="currentPage.pageSettings"
+      :settings="settings"
       :form="currentProps"
       :data="currentPropsData"
       @data-change="handleDataChange"
@@ -31,9 +31,13 @@ import PreviewWrapper from "./preview-wrapper/index.vue";
 import PropsForm from "./props-form/index.vue";
 import { defineComponent, ref, computed } from "vue";
 import { message } from "ant-design-vue";
-import { getPageList, setPageList } from "./utils";
 import { useRoute, useRouter } from "vue-router";
 import { BasicComponents } from "./component-list/data";
+import {
+  getPageItem,
+  createPageItem,
+  updatePageItem,
+} from "@/api/landing-page";
 
 export default defineComponent({
   components: {
@@ -46,7 +50,7 @@ export default defineComponent({
     const router = useRouter();
     const pageId = computed(() => route.query.id);
 
-    const currentPage = ref({ pageSettings: {} });
+    const currentPage = ref({});
     const currentProps = ref({});
     const currentPropsData = ref({});
 
@@ -58,32 +62,22 @@ export default defineComponent({
       const result = data ? Object.assign(data) : {};
       const pageHeight = prefviewWrp.value.boxHeight;
       result.pageHeight = pageHeight;
-      return result;
+      return Object.assign(settings.value, result);
     };
 
     const handleSaveSubmit = () => {
-      const list = getPageList();
-      if (!pageId.value) {
-        const id = Date.now();
-        const page = {
-          id,
-          settings: getSettingsData(),
-          configList: [...configList.value],
-        };
-        list.push(page);
-        setPageList(list);
-        setTimeout(() => {
-          router.go(-1);
-        }, 300);
-      } else {
-        const index = list.findIndex((e) => String(e.id) === pageId.value);
-        const data = list[index];
-        data.configList = configList.value;
-        data.settings = getSettingsData(data.settings);
-        console.log(data);
-        setPageList(list);
+      const action = pageId.value ? updatePageItem : createPageItem;
+      const page: any = {
+        settings: getSettingsData(),
+        configList: [...configList.value],
+      };
+      if (pageId.value) {
+        page.id = pageId.value;
       }
-      message.info("保存成功");
+      action(page).then(() => {
+        router.go(-1);
+        message.info("保存成功");
+      });
     };
 
     const handleConfigChange = (data) => {
@@ -138,22 +132,24 @@ export default defineComponent({
     };
 
     if (pageId.value) {
-      const pageList = getPageList();
-      const data: any = pageList.find((e) => String(e.id) === pageId.value);
-      currentPage.value = data;
-      if (data) {
-        console.log("find item !");
-        console.log(data);
-        const { configList: result, settings: originSettings } = data;
-        configList.value = result;
-        settings.value = originSettings || { pageHeight: "100%" };
-      }
+      getPageItem({
+        id: pageId.value,
+      }).then((res: any) => {
+        console.log(res);
+        currentPage.value = res;
+        if (res) {
+          console.log("find item !");
+          const { configList: result, settings: originSettings } = res;
+          configList.value = result;
+          settings.value = originSettings || { pageHeight: "100%" };
+        }
+      });
     }
 
     const handlePageFormSubmit = (data) => {
       console.log("pageform");
       console.log(data);
-      currentPage.value.pageSettings = data;
+      settings.value = Object.assign(settings.value, data);
       handleSaveSubmit();
     };
 
