@@ -75,7 +75,6 @@ export default defineComponent({
         page.id = pageId.value;
       }
       action(page).then(() => {
-        router.go(-1);
         message.info("保存成功");
       });
     };
@@ -147,8 +146,6 @@ export default defineComponent({
     }
 
     const handlePageFormSubmit = (data) => {
-      console.log("pageform");
-      console.log(data);
       settings.value = Object.assign(settings.value, data);
       handleSaveSubmit();
     };

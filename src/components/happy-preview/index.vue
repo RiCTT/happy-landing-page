@@ -41,7 +41,7 @@
 
 <script lang="ts">
 // 该组件用来展示页面组件列表，如涉及样式处理，可在外层或者穿透
-import { defineComponent, effect, onMounted, ref } from "vue";
+import { defineComponent, onMounted, ref, onUpdated } from "vue";
 
 const createMeta = () => {
   const meta = document.createElement("meta");
@@ -263,7 +263,7 @@ export default defineComponent({
       return result;
     };
 
-    effect(() => {
+    onUpdated(() => {
       setTimeout(() => {
         setEleAttribute();
       });
