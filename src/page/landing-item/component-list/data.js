@@ -80,7 +80,7 @@ export const BasicComponents = [
     },
   },
   {
-    name: "van-image",
+    name: "van-image-v2",
     label: "图片",
     iconSrc: require("./images/image.png"),
     props: {
@@ -89,6 +89,11 @@ export const BasicComponents = [
         label: "图片链接",
         ui: "text",
         required: true,
+      },
+      href: {
+        type: "string",
+        label: "跳转链接",
+        ui: "text",
       },
     },
   },

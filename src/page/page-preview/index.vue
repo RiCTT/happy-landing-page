@@ -9,7 +9,7 @@
 <script lang="ts">
 import HappyPreview from "@/components/happy-preview/index.vue";
 import { defineComponent, ref, computed } from "vue";
-import { getPageList } from "../landing-item/utils";
+import { getPageItem } from "@/api/landing-page";
 import { useRoute } from "vue-router";
 export default defineComponent({
   components: {
@@ -21,15 +21,11 @@ export default defineComponent({
     const route = useRoute();
     const pageId = computed(() => route.query.id);
     if (pageId.value) {
-      const pageList = getPageList();
-      const data = pageList.find((e) => String(e.id) === pageId.value);
-      if (data) {
-        console.log(data);
-        console.log("find");
-        const { configList: result, settings: originSettings } = data;
+      getPageItem({ id: pageId.value }).then((res: any) => {
+        const { configList: result, settings: originSettings } = res;
         configList.value = result;
         settings.value = originSettings;
-      }
+      });
     }
     return {
       configList,
@@ -43,13 +39,9 @@ export default defineComponent({
 .preview-wrapper {
   width: 100%;
   height: 100%;
-  max-height: 667px;
-  overflow: auto;
   .preview-inner {
-    max-width: 375px;
     width: 100%;
     height: 100%;
-    margin: 40px auto;
     background-color: #fff;
     overflow: auto;
   }
