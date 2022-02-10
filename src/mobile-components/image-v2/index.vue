@@ -1,5 +1,5 @@
 <template>
-  <van-image v-bind="$attrs" @click="onClick" class="sss" />
+  <van-image v-bind="$attrs" @click="onClick" />
 </template>
 
 <script lang="ts">
