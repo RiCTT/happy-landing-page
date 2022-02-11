@@ -6,18 +6,9 @@
         <a-button @click="goBackToList">返回列表</a-button>
         <a-button type="primary" @click="goToPreview">预览页面</a-button>
       </div>
-      <PreviewWrapper
-        ref="prefviewWrp"
-        :configList="configList"
-        :pageHeight="settings.pageHeight"
-        @config-change="handleConfigChange"
-        @config-select="handleConfigSelect"
-      />
+      <PreviewWrapper ref="prefviewWrp" />
     </div>
     <PropsForm
-      :settings="settings"
-      :form="currentProps"
-      :data="currentPropsData"
       @data-change="handleDataChange"
       @submit="handleSaveSubmit"
       @page-submit="handlePageFormSubmit"
@@ -32,12 +23,12 @@ import PropsForm from "./props-form/index.vue";
 import { defineComponent, ref, computed } from "vue";
 import { message } from "ant-design-vue";
 import { useRoute, useRouter } from "vue-router";
-import { BasicComponents } from "./component-list/data";
 import {
   getPageItem,
   createPageItem,
   updatePageItem,
 } from "@/api/landing-page";
+import { usePageStore } from "@/store/page";
 
 export default defineComponent({
   components: {
@@ -46,30 +37,32 @@ export default defineComponent({
     PreviewWrapper,
   },
   setup() {
+    const pageStore = usePageStore();
     const route = useRoute();
     const router = useRouter();
     const pageId = computed(() => route.query.id);
 
-    const currentPage = ref({});
-    const currentProps = ref({});
-    const currentPropsData = ref({});
+    if (pageId.value) {
+      getPageItem({
+        id: pageId.value,
+      }).then((res: any) => {
+        console.log(res);
+        if (res) {
+          console.log("find item !");
+          const { configList: result, settings: originSettings } = res;
+          pageStore.setConfigList(result);
+          pageStore.setSettings(originSettings || { pageHeight: "100%" });
+        }
+      });
+    }
 
     const prefviewWrp = ref();
-    const configList: any = ref([]);
-    const settings = ref({ pageHeight: "100%" });
-
-    const getSettingsData = (data?) => {
-      const result = data ? Object.assign(data) : {};
-      const pageHeight = prefviewWrp.value.boxHeight;
-      result.pageHeight = pageHeight;
-      return Object.assign(settings.value, result);
-    };
 
     const handleSaveSubmit = () => {
       const action = pageId.value ? updatePageItem : createPageItem;
       const page: any = {
-        settings: getSettingsData(),
-        configList: [...configList.value],
+        settings: { ...pageStore.settings },
+        configList: [...pageStore.configList],
       };
       if (pageId.value) {
         page.id = pageId.value;
@@ -79,31 +72,28 @@ export default defineComponent({
       });
     };
 
-    const handleConfigChange = (data) => {
-      configList.value = [...data];
-    };
-
     // 赋值到对应的组件data上
     const handleDataChange = (data) => {
-      const index = prefviewWrp.value.getCurrentIndex();
-      const currentComp = configList.value[index];
-      const oldData = currentComp.data;
-      currentComp.data = Object.assign(oldData, data);
+      // const index = prefviewWrp.value.getCurrentIndex();
+      const index = pageStore.selectIndex;
+      console.log("data change !!!");
+      console.log(index);
+      if (index !== -1) {
+        const currentComp: any = pageStore.configList[index];
+        const oldData = currentComp.data;
+        const newData = Object.assign(oldData, data);
+        currentComp.data = newData;
+        pageStore.setCurPropsData(newData);
+      }
     };
 
     const handleAddComponent = (comp) => {
       console.log(comp);
       let data = initComponentDefaultValue(comp);
       message.info("添加成功!");
-      configList.value.push(data);
-    };
-
-    const handleConfigSelect = (config) => {
-      const { data, name } = config;
-      const targetComp: any = BasicComponents.find((e) => e.name === name);
-      const { props } = targetComp;
-      currentProps.value = props;
-      currentPropsData.value = data;
+      const list: any[] = pageStore.configList;
+      list.push(data);
+      pageStore.setConfigList(list);
     };
 
     const initComponentDefaultValue = (comp) => {
@@ -126,27 +116,12 @@ export default defineComponent({
       // result.style.top = "50%";
       result.style.top = "0";
       // result.style.transform = "translateY(-50%)";
-      result.style.zIndex = configList.value.length + 11;
+      result.style.zIndex = pageStore.configList.length + 11;
       return result;
     };
 
-    if (pageId.value) {
-      getPageItem({
-        id: pageId.value,
-      }).then((res: any) => {
-        console.log(res);
-        currentPage.value = res;
-        if (res) {
-          console.log("find item !");
-          const { configList: result, settings: originSettings } = res;
-          configList.value = result;
-          settings.value = originSettings || { pageHeight: "100%" };
-        }
-      });
-    }
-
     const handlePageFormSubmit = (data) => {
-      settings.value = Object.assign(settings.value, data);
+      pageStore.setSettings(Object.assign(pageStore.settings, data));
       handleSaveSubmit();
     };
 
@@ -162,19 +137,13 @@ export default defineComponent({
     };
 
     return {
-      currentPage,
-      configList,
-      settings,
-      currentProps,
-      currentPropsData,
+      pageStore,
       prefviewWrp,
       goBackToList,
       goToPreview,
       handlePageFormSubmit,
       handleSaveSubmit,
       handleDataChange,
-      handleConfigSelect,
-      handleConfigChange,
       handleAddComponent,
     };
   },

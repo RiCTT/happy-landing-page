@@ -21,7 +21,10 @@ export default defineComponent({
     const route = useRoute();
     const pageId = computed(() => route.query.id);
     if (pageId.value) {
+      console.log("get Page item");
       getPageItem({ id: pageId.value }).then((res: any) => {
+        console.log("page result");
+        console.log(res);
         const { configList: result, settings: originSettings } = res;
         configList.value = result;
         settings.value = originSettings;

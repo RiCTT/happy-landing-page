@@ -96,7 +96,7 @@ export default defineComponent({
     const onConfigItemClick = (config, index) => {
       if (props.mode === "edit") {
         configIndex.value = index;
-        ctx.emit("config-select", config);
+        ctx.emit("config-select", config, index);
       }
     };
 

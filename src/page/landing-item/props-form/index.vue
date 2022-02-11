@@ -13,7 +13,7 @@
         >
           <!-- form是object类型 -->
           <a-form-item
-            v-for="(val, key) in form"
+            v-for="(val, key) in pageStore.currentSelectProps"
             :key="key"
             :label="val.label"
             :name="[key]"
@@ -97,10 +97,7 @@
       </a-tab-pane>
       <a-tab-pane key="2" tab="动画效果">动画效果</a-tab-pane>
       <a-tab-pane key="3" tab="其他">
-        <PageForm
-          :settings="settings"
-          @page-submit="$emit('page-submit', $event)"
-        />
+        <PageForm @page-submit="$emit('page-submit', $event)" />
       </a-tab-pane>
     </a-tabs>
 
@@ -122,6 +119,7 @@ import {
   ArrowUpOutlined,
   EditFilled,
 } from "@ant-design/icons-vue";
+import { usePageStore } from "@/store/page";
 
 export default defineComponent({
   components: {
@@ -131,18 +129,9 @@ export default defineComponent({
     ArrowUpOutlined,
     EditFilled,
   },
-  props: {
-    form: {
-      type: Object,
-    },
-    data: {
-      type: Object,
-    },
-    settings: {
-      type: Object,
-    },
-  },
+  props: {},
   setup(props, ctx) {
+    const pageStore = usePageStore();
     const activeKey = ref("1");
     const model: any = ref({});
     const rules = ref({});
@@ -150,9 +139,9 @@ export default defineComponent({
     const currentField = ref({});
 
     watch(
-      () => props.form,
+      () => pageStore.currentSelectProps,
       (val = {}) => {
-        const propsData: any = props.data;
+        const propsData: any = pageStore.currentSelectPropsData;
         const result = formatPropsData(val, propsData);
         const rulesResult = {};
         Object.keys(val).forEach((key) => {
@@ -162,8 +151,7 @@ export default defineComponent({
             rulesResult[key].push({ required: true, message: "不能为空" });
           }
           if (validator) {
-            console.log("typeof validao");
-            console.log(typeof validator);
+            console.log("validator");
             console.log(validator);
             rulesResult[key].push({ validator });
           }
@@ -182,11 +170,6 @@ export default defineComponent({
       },
       { deep: true }
     );
-
-    const handlePageFormSubmit = (data) => {
-      console.log("pageform");
-      console.log(data);
-    };
 
     const getNestedRules = (subItem) => {
       // eslint-disable-next-line no-undef
@@ -254,12 +237,12 @@ export default defineComponent({
     };
 
     return {
+      pageStore,
       model,
       rules,
       activeKey,
       modalVisible,
       currentField,
-      handlePageFormSubmit,
       getNestedRules,
       addNewItem,
       removeItem,

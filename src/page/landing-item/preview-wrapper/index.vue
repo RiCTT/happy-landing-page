@@ -3,9 +3,9 @@
     <div class="preview-inner">
       <HappyPreview
         ref="previewWrp"
-        :configList="configList"
-        :boxHeight="boxHeight"
-        @config-select="$emit('config-select', $event)"
+        :configList="pageStore.configList"
+        :boxHeight="pageStore.settings.pageHeight"
+        @config-select="handleConfigSelect"
         @config-change="handleConfigChange"
       />
     </div>
@@ -30,7 +30,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, onMounted, watch } from "vue";
+import { defineComponent, ref, onMounted } from "vue";
 import HappyPreview from "@/components/happy-preview/index.vue";
 import {
   UpCircleTwoTone,
@@ -39,18 +39,10 @@ import {
   PlusSquareTwoTone,
   MinusSquareTwoTone,
 } from "@ant-design/icons-vue";
+import { usePageStore } from "@/store/page";
+import { BasicComponents } from "../component-list/data";
 
 export default defineComponent({
-  props: {
-    configList: {
-      type: Array,
-      default: () => [],
-    },
-    pageHeight: {
-      type: String,
-      default: "100%",
-    },
-  },
   components: {
     HappyPreview,
     UpCircleTwoTone,
@@ -59,17 +51,10 @@ export default defineComponent({
     PlusSquareTwoTone,
     MinusSquareTwoTone,
   },
-  setup(props, ctx) {
+  setup() {
+    const pageStore = usePageStore();
     const previewWrp: any = ref({});
-    const boxHeight = ref(props.pageHeight);
     const twoToneColor = ref("#ff8000");
-
-    watch(
-      () => props.pageHeight,
-      (val) => {
-        boxHeight.value = val;
-      }
-    );
 
     // 提高层级
     const onMoveUpBtn = () => {
@@ -81,8 +66,6 @@ export default defineComponent({
       const current = currentConfigList[index];
       const zIndex = current.zIndex || 10;
       current.zIndex = zIndex + 1;
-      // configList.value = [...currentConfigList];
-      // ctx.emit("config-change", [...currentConfigList]);
       emitConfigChange([...currentConfigList]);
     };
     // 降低层级
@@ -95,9 +78,7 @@ export default defineComponent({
       const current = currentConfigList[index];
       const zIndex = current.zIndex || 10;
       current.zIndex = zIndex - 1;
-      // ctx.emit("config-change", [...currentConfigList]);
       emitConfigChange([...currentConfigList]);
-      // configList.value = [...currentConfigList];
     };
     const onRemoveBtn = () => {
       const index = previewWrp.value.getCurrentConfigIndex();
@@ -106,17 +87,17 @@ export default defineComponent({
       }
       const currentConfigList = previewWrp.value.getConfigList();
       currentConfigList.splice(index, 1);
-      // ctx.emit("config-change", [...currentConfigList]);
       emitConfigChange([...currentConfigList]);
-      // configList.value = [...currentConfigList];
     };
 
     const onAddHeightBtn = () => {
-      boxHeight.value = parseInt(boxHeight.value) + 20 + "px";
+      const val = parseInt(pageStore.settings.pageHeight) + 20 + "px";
+      pageStore.setPageHeight(val);
     };
 
     const onMinusHeightBtn = () => {
-      boxHeight.value = parseInt(boxHeight.value) - 20 + "px";
+      const val = parseInt(pageStore.settings.pageHeight) - 20 + "px";
+      pageStore.setPageHeight(val);
     };
 
     const getCurrentIndex = () => {
@@ -124,23 +105,31 @@ export default defineComponent({
     };
 
     const handleConfigChange = (data) => {
-      // configList.value = [...data];
-      // ctx.emit("config-change", [...data]);
-      emitConfigChange(data);
+      pageStore.setConfigList(data);
     };
 
     const emitConfigChange = (data) => {
-      ctx.emit("config-change", data);
+      pageStore.setConfigList(data);
+    };
+
+    const handleConfigSelect = (config, index) => {
+      const { data, name } = config;
+      const targetComp: any = BasicComponents.find((e) => e.name === name);
+      const { props } = targetComp;
+      pageStore.setCurProps({ ...props });
+      pageStore.setCurPropsData(data);
+      pageStore.setSelectIndex(index);
     };
 
     onMounted(() => {
       const el = previewWrp.value.$el;
-      if (props.pageHeight === "100%") {
-        boxHeight.value = el.offsetHeight + "px";
+      const val = pageStore.settings.pageHeight;
+      if (val === "100%" || !val) {
+        pageStore.setPageHeight(el.offsetHeight + "px");
       }
     });
     return {
-      boxHeight,
+      pageStore,
       getCurrentIndex,
       previewWrp,
       twoToneColor,
@@ -150,6 +139,7 @@ export default defineComponent({
       onAddHeightBtn,
       onMinusHeightBtn,
       handleConfigChange,
+      handleConfigSelect,
     };
   },
 });

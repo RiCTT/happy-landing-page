@@ -23,15 +23,11 @@
 
 <script lang="ts">
 import { defineComponent, ref, watch } from "vue";
+import { usePageStore } from "@/store/page";
 
 export default defineComponent({
-  props: {
-    settings: {
-      type: Object,
-      default: () => {},
-    },
-  },
   setup(props, ctx) {
+    const pageStore = usePageStore();
     const model = ref({});
     const rules = ref({});
 
@@ -40,7 +36,7 @@ export default defineComponent({
     };
 
     watch(
-      () => props.settings,
+      () => pageStore.settings,
       (val) => {
         model.value = val || {};
       },
@@ -52,6 +48,7 @@ export default defineComponent({
     return {
       model,
       rules,
+      pageStore,
       onFinish,
     };
   },

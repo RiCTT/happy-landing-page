@@ -40,9 +40,6 @@ export const BasicComponents = [
             type: "string",
             ui: "text",
             validator: (rules, value) => {
-              console.log("valid!!");
-              console.log(value);
-              console.log(rules);
               if (!value) {
                 return Promise.reject("图片不能为空");
               }
@@ -145,7 +142,19 @@ export const BasicComponents = [
             key: "username",
             label: "姓名",
             required: true,
-            rules: [{ required: true, message: "请填写用户名" }],
+            validator: (rules, value) => {
+              console.log(value);
+              return Promise.reject("ssss");
+            },
+            rules: [
+              { required: true, message: "请填写用户名" },
+              {
+                validator: (rules, value) => {
+                  console.log(value);
+                  return Promise.reject("ssss");
+                },
+              },
+            ],
           },
           {
             ui: "password",
