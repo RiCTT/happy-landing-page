@@ -6,6 +6,7 @@ const routes: Array<RouteRecordRaw> = [
     path: "/",
     name: "Home",
     component: Home,
+    redirect: "/landing-list",
   },
   {
     path: "/landing-list",

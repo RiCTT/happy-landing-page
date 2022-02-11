@@ -3,6 +3,8 @@
     <div
       class="config-list-wrapper"
       :style="{ height: boxHeight }"
+      tabindex="1"
+      @keydown="onKeyDown"
       @mousedown.stop="onConfigItemMouseDown"
       @mousemove.stop="onConfigItemMouseMove"
       @mouseup.stop.prevent="onConfigItemMouseUp"
@@ -41,8 +43,8 @@
 
 <script lang="ts">
 // 该组件用来展示页面组件列表，如涉及样式处理，可在外层或者穿透
-import { defineComponent, onMounted, ref, onUpdated } from "vue";
-
+import { defineComponent, onMounted, ref, onUpdated, computed } from "vue";
+import { useKeyEvent } from "./hooks/useKeyEvent";
 const createMeta = () => {
   const meta = document.createElement("meta");
   meta.setAttribute("name", "viewport");
@@ -87,6 +89,12 @@ export default defineComponent({
       lastOffsetX: 0,
       lastOffsetY: 0,
       ele: null,
+    });
+
+    const { onKeyDown } = useKeyEvent({
+      configIndex,
+      configList: computed(() => props.configList),
+      mode: computed(() => props.mode),
     });
 
     onMounted(() => {
@@ -279,6 +287,7 @@ export default defineComponent({
       maskStyle,
       mouseState,
       configIndex,
+      onKeyDown,
       getConfigWrapperStyle,
       getConfigWrapperInnerStyle,
       setEleAttribute,
@@ -308,6 +317,7 @@ export default defineComponent({
   .config-list-wrapper {
     width: 100%;
     height: 100%;
+    outline: none;
     overflow: hidden;
   }
 }

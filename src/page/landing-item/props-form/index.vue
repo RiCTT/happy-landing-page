@@ -151,8 +151,6 @@ export default defineComponent({
             rulesResult[key].push({ required: true, message: "不能为空" });
           }
           if (validator) {
-            console.log("validator");
-            console.log(validator);
             rulesResult[key].push({ validator });
           }
         });
@@ -206,7 +204,6 @@ export default defineComponent({
     };
 
     const onClikEditIcon = (field) => {
-      console.log(field);
       if (!field.id) {
         field.id = Date.now();
       }

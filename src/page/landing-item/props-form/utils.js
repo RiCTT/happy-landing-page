@@ -1,10 +1,4 @@
-export const isArray = (val) => {
-  return Object.prototype.toString.call(val) === "[object Array]";
-};
-
-export const isObject = (val) => {
-  return Object.prototype.toString.call(val) === "[object Object]";
-};
+import { isArray, isObject } from "@/utils/index";
 
 export const formatPropsData = (data, formData) => {
   let result;

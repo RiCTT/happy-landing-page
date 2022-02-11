@@ -11,6 +11,9 @@
       <a-form-item label="页面标题" name="title">
         <a-input v-model:value="model.title" />
       </a-form-item>
+      <a-form-item label="页面高度" name="pageHeight">
+        <a-input v-model:value="model.pageHeight" suffix="px" />
+      </a-form-item>
       <a-form-item label="页面背景颜色" name="backgroundColor">
         <a-input v-model:value="model.backgroundColor" />
       </a-form-item>
@@ -37,7 +40,7 @@ export default defineComponent({
 
     watch(
       () => pageStore.settings,
-      (val) => {
+      (val: any) => {
         model.value = val || {};
       },
       {
