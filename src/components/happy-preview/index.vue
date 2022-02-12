@@ -31,8 +31,6 @@
           class="config-item-mask"
           :class="{ isBlock: layout === 'block' }"
           :style="maskStyle"
-          @mousedown.stop="maskSquareDown"
-          @mousemove.stop="maskSquareMove"
         >
           <span class="square left-top"></span>
           <span class="square left-bottom"></span>
@@ -93,7 +91,11 @@ export default defineComponent({
     const maskStyle = ref({});
     const configIndex = ref(-1);
 
-    const { maskSquareDown, maskSquareMove } = useResizeSquare();
+    const { maskSquareDown, maskSquareMove, maskSquareUp } = useResizeSquare({
+      props,
+      ctx,
+      configIndex,
+    });
 
     const { onKeyDown } = useKeyEvent({
       configIndex,
@@ -151,7 +153,7 @@ export default defineComponent({
 
     const getConfigWrapperStyle = (style) => {
       // 只关心组件一些逻辑样式，不需要业务样式
-      const { top, left, zIndex } = style;
+      const { top, left, zIndex, width } = style;
       if (props.layout === "position") {
         return {
           top,
@@ -160,6 +162,7 @@ export default defineComponent({
         };
       }
       return {
+        width,
         zIndex,
       };
     };
@@ -170,6 +173,7 @@ export default defineComponent({
       let result = pureStyle;
       // 因为容器定位的样式跟业务样式绑定在一块，所以这里要剔除掉
       delete pureStyle.top;
+      delete pureStyle.width;
       delete pureStyle.left;
       delete pureStyle.zIndex;
       if (props.mode === "edit") {
@@ -196,6 +200,7 @@ export default defineComponent({
       onKeyDown,
       maskSquareDown,
       maskSquareMove,
+      maskSquareUp,
       setConfigIndex,
       getConfigWrapperStyle,
       getConfigWrapperInnerStyle,

@@ -27,8 +27,7 @@ export const useKeyEvent = ({ configIndex, configList, mode, layout }) => {
         break;
     }
 
-    e.preventDefault();
-    return false;
+    // e.preventDefault();
   };
 
   const move = (direction, value) => {
