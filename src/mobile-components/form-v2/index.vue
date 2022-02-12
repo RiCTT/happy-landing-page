@@ -58,7 +58,7 @@
       />
     </van-popup>
 
-    <div style="margin: 16px">
+    <div style="padding: 16px">
       <van-button round block type="primary" native-type="submit">
         提交
       </van-button>

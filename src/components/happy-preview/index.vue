@@ -31,6 +31,8 @@
           class="config-item-mask"
           :class="{ isBlock: layout === 'block' }"
           :style="maskStyle"
+          @mousedown.stop="maskSquareDown"
+          @mousemove.stop="maskSquareMove"
         >
           <span class="square left-top"></span>
           <span class="square left-bottom"></span>
@@ -46,6 +48,8 @@
 // 该组件用来展示页面组件列表，如涉及样式处理，可在外层或者穿透
 import { defineComponent, onMounted, ref, onUpdated, computed } from "vue";
 import { useKeyEvent } from "./hooks/useKeyEvent";
+import { useResizeSquare } from "./hooks/useResizeSquare";
+import { useMouse } from "./hooks/useMouse";
 const createMeta = () => {
   const meta = document.createElement("meta");
   meta.setAttribute("name", "viewport");
@@ -88,14 +92,8 @@ export default defineComponent({
     const wrapperWidth = ref();
     const maskStyle = ref({});
     const configIndex = ref(-1);
-    const mouseState = ref({
-      dragging: false,
-      startX: 0,
-      startY: 0,
-      lastOffsetX: 0,
-      lastOffsetY: 0,
-      ele: null,
-    });
+
+    const { maskSquareDown, maskSquareMove } = useResizeSquare();
 
     const { onKeyDown } = useKeyEvent({
       configIndex,
@@ -103,6 +101,12 @@ export default defineComponent({
       mode: computed(() => props.mode),
       layout: computed(() => props.layout),
     });
+
+    const {
+      onConfigItemMouseDown,
+      onConfigItemMouseMove,
+      onConfigItemMouseUp,
+    } = useMouse({ props, ctx, configIndex });
 
     onMounted(() => {
       wrapperWidth.value = wrapper.value.offsetWidth;
@@ -117,119 +121,6 @@ export default defineComponent({
 
     const setConfigIndex = (index) => {
       configIndex.value = index;
-    };
-
-    const onConfigItemMouseDown = (e) => {
-      if (props.mode !== "edit") {
-        return;
-      }
-      const { clientX, clientY } = e;
-      const target = e.target;
-      const offsetX = Number(target.getAttribute(OFFSET_X_KEY));
-      const offsetY = Number(target.getAttribute(OFFSET_Y_KEY));
-      console.log("down!");
-      console.log(offsetX);
-      console.log(offsetY);
-      mouseState.value.startX = clientX;
-      mouseState.value.startY = clientY;
-      mouseState.value.lastOffsetX = offsetX;
-      mouseState.value.lastOffsetY = offsetY;
-      configIndex.value = target.getAttribute("index")
-        ? Number(target.getAttribute("index"))
-        : -1;
-      const isWrapper = Boolean(target.getAttribute("isWrapper"));
-      if (isWrapper) {
-        mouseState.value.dragging = true;
-        mouseState.value.ele = target;
-      } else {
-        mouseState.value.dragging = false;
-        mouseState.value.ele = null;
-      }
-    };
-
-    const onConfigItemMouseMove = (e) => {
-      if (props.mode !== "edit" || props.layout === "block") {
-        return;
-      }
-      if (!mouseState.value.dragging) {
-        return;
-      }
-      if (!mouseState.value.ele) {
-        return;
-      }
-      console.log("move ing !");
-
-      const { clientX, clientY } = e;
-      const { startX, startY, lastOffsetX, lastOffsetY, ele } =
-        mouseState.value;
-      const absX = Math.abs(startX - clientX);
-      const absY = Math.abs(startY - clientY);
-      console.log("absX: ", absX);
-      console.log("absY: ", absY);
-      const target: any = ele;
-      // 1、首先获取本身的偏移量
-      // 2、计算当前移动的绝对值
-      // 3、判断方向进行处理
-      let resultX = 0;
-      let resultY = 0;
-      if (startX < clientX) {
-        // 往下走，transformx应该是正直
-        resultX = absX + lastOffsetX;
-      } else {
-        resultX = -absX + lastOffsetX;
-      }
-
-      if (startY < clientY) {
-        // 往右走
-        resultY = absY + lastOffsetY;
-      } else {
-        resultY = -absY + lastOffsetY;
-      }
-      console.log(`resultX: ${resultX}, resultY: ${resultY};`);
-      // const style = `translate(${resultX}px, ${resultY}px)`;
-      target.setAttribute(OFFSET_X_KEY, resultX);
-      target.setAttribute(OFFSET_Y_KEY, resultY);
-      // target.style.transform = style;
-      target.style.left = resultX + "px";
-      target.style.top = resultY + "px";
-      console.log("drag move");
-    };
-
-    const onConfigItemMouseUp = () => {
-      if (props.mode !== "edit") {
-        return;
-      }
-      mouseState.value.dragging = false;
-      mouseState.value.startX = 0;
-      mouseState.value.startY = 0;
-      mouseState.value.lastOffsetX = 0;
-      mouseState.value.lastOffsetY = 0;
-      mouseState.value.ele = null;
-      console.log("drag end");
-      // console.log(JSON.stringify(props.configList));
-      const list = getConfigList();
-      ctx.emit("config-change", list);
-      return false;
-    };
-
-    const getConfigList = () => {
-      const list = [...props.configList];
-      // 拿到所有的元素，更新对应的数据节点相应属性，比如transfrom
-      const eleList = document.querySelectorAll(".config-item");
-      for (let i = 0; i < list.length; i++) {
-        const data: any = list[i];
-        const currentEle = eleList[i];
-        const x = Number(currentEle.getAttribute(OFFSET_X_KEY));
-        const y = Number(currentEle.getAttribute(OFFSET_Y_KEY));
-        const style = {
-          // transform: `translate(${x}px, ${y}px);`,
-          left: `${x}px`,
-          top: `${y}px`,
-          zIndex: data.zIndex || 10 + i,
-        };
-        data.style = Object.assign(data.style || {}, style);
-      }
-      return list;
     };
 
     const getCurrentConfigIndex = () => {
@@ -301,9 +192,10 @@ export default defineComponent({
       wrapper,
       wrapperWidth,
       maskStyle,
-      mouseState,
       configIndex,
       onKeyDown,
+      maskSquareDown,
+      maskSquareMove,
       setConfigIndex,
       getConfigWrapperStyle,
       getConfigWrapperInnerStyle,
@@ -312,7 +204,6 @@ export default defineComponent({
       onConfigItemMouseDown,
       onConfigItemMouseMove,
       onConfigItemMouseUp,
-      getConfigList,
       getCurrentConfigIndex,
     };
   },
@@ -356,7 +247,7 @@ export default defineComponent({
     inset: 0;
     border: 3px solid #ff8000;
     pointer-events: none;
-    user-select: none
+    user-select: none;
 
     .square {
       position: absolute;
