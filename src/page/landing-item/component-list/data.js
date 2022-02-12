@@ -1,6 +1,6 @@
 export const BasicComponents = [
   {
-    name: "van-button",
+    name: "van-button-v2",
     label: "按钮",
     iconSrc: require("./images/button.png"),
     props: {
@@ -95,12 +95,12 @@ export const BasicComponents = [
     },
   },
   {
-    name: "van-count-down",
+    name: "van-count-down-v2",
     label: "倒计时",
     iconSrc: require("./images/countdown.png"),
   },
   {
-    name: "van-divider",
+    name: "van-divider-v2",
     label: "分割线",
     iconSrc: require("./images/divider.png"),
   },
