@@ -5,6 +5,7 @@
         ref="previewWrp"
         :configList="pageStore.configList"
         :boxHeight="pageStore.settings.pageHeight"
+        :layout="$attrs.layout"
         @config-select="handleConfigSelect"
         @config-change="handleConfigChange"
       />
@@ -60,25 +61,47 @@ export default defineComponent({
     const onMoveUpBtn = () => {
       const index = previewWrp.value.getCurrentConfigIndex();
       const currentConfigList = previewWrp.value.getConfigList();
-      if (index === -1) {
+      // if (index === -1) {
+      //   return;
+      // }
+      if (index === -1 || index === 0) {
         return;
       }
-      const current = currentConfigList[index];
-      const zIndex = current.zIndex || 10;
-      current.zIndex = zIndex + 1;
+      // 块布局的处理
+      const temp = currentConfigList[index];
+      currentConfigList[index] = currentConfigList[index - 1];
+      currentConfigList[index - 1] = temp;
       emitConfigChange([...currentConfigList]);
+      previewWrp.value.setConfigIndex(index - 1);
+      pageStore.setSelectIndex(index - 1);
+
+      // 定位布局时的zIndex处理
+      // const current = currentConfigList[index];
+      // const zIndex = current.zIndex || 10;
+      // current.zIndex = zIndex + 1;
+      // emitConfigChange([...currentConfigList]);
     };
     // 降低层级
     const onMoveDownBtn = () => {
       const index = previewWrp.value.getCurrentConfigIndex();
       const currentConfigList = previewWrp.value.getConfigList();
-      if (index === -1) {
+      // if (index === -1) {
+      //   return;
+      // }
+      if (index === currentConfigList.length - 1) {
         return;
       }
-      const current = currentConfigList[index];
-      const zIndex = current.zIndex || 10;
-      current.zIndex = zIndex - 1;
+      const temp = currentConfigList[index];
+      currentConfigList[index] = currentConfigList[index + 1];
+      currentConfigList[index + 1] = temp;
       emitConfigChange([...currentConfigList]);
+      previewWrp.value.setConfigIndex(index + 1);
+      pageStore.setSelectIndex(index + 1);
+
+      // const current = currentConfigList[index];
+      // const zIndex = current.zIndex || 10;
+      // current.zIndex = zIndex - 1;
+      // emitConfigChange([...currentConfigList]);
     };
     const onRemoveBtn = () => {
       const index = previewWrp.value.getCurrentConfigIndex();

@@ -1,10 +1,10 @@
-export const useKeyEvent = ({ configIndex, configList, mode }) => {
+export const useKeyEvent = ({ configIndex, configList, mode, layout }) => {
   const onKeyDown = (e) => {
     const index = configIndex.value;
     if (index === -1) {
       return;
     }
-    if (mode === "show") {
+    if (mode.value === "show" || layout.value === "block") {
       return;
     }
     const current = configList.value[index];

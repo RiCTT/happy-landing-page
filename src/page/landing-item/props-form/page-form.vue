@@ -8,6 +8,12 @@
       autocomplete="off"
       @finish="onFinish"
     >
+      <a-form-item label="页面布局" name="layout">
+        <a-radio-group v-model:value="model.layout" defaultValue="block">
+          <a-radio value="block">块布局</a-radio>
+          <a-radio value="position">定位布局</a-radio>
+        </a-radio-group>
+      </a-form-item>
       <a-form-item label="页面标题" name="title">
         <a-input v-model:value="model.title" />
       </a-form-item>
@@ -36,6 +42,8 @@ export default defineComponent({
 
     const onFinish = (value) => {
       ctx.emit("page-submit", value);
+      console.log("value");
+      console.log(value);
     };
 
     watch(

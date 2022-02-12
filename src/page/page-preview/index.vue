@@ -1,7 +1,11 @@
 <template>
   <div class="preview-wrapper">
     <div class="preview-inner" :style="{ height: settings.pageHeight }">
-      <HappyPreview :configList="configList" mode="show" />
+      <HappyPreview
+        :configList="configList"
+        mode="show"
+        :layout="settings.layout || 'block'"
+      />
     </div>
   </div>
 </template>

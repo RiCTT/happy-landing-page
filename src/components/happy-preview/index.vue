@@ -13,7 +13,7 @@
         class="config-item"
         isWrapper="true"
         :index="i"
-        :class="{ active: configIndex === i }"
+        :class="{ active: configIndex === i, isBlock: layout === 'block' }"
         v-for="(item, i) in configList"
         :key="item.id"
         :style="getConfigWrapperStyle(item.style)"
@@ -29,6 +29,7 @@
         <div
           v-if="configIndex === i && mode === 'edit'"
           class="config-item-mask"
+          :class="{ isBlock: layout === 'block' }"
           :style="maskStyle"
         >
           <span class="square left-top"></span>
@@ -76,6 +77,11 @@ export default defineComponent({
       // edit, show
       default: "edit",
     },
+    layout: {
+      type: String,
+      // block, position
+      default: "block",
+    },
   },
   setup(props, ctx) {
     const wrapper = ref();
@@ -95,6 +101,7 @@ export default defineComponent({
       configIndex,
       configList: computed(() => props.configList),
       mode: computed(() => props.mode),
+      layout: computed(() => props.layout),
     });
 
     onMounted(() => {
@@ -106,6 +113,10 @@ export default defineComponent({
         configIndex.value = index;
         ctx.emit("config-select", config, index);
       }
+    };
+
+    const setConfigIndex = (index) => {
+      configIndex.value = index;
     };
 
     const onConfigItemMouseDown = (e) => {
@@ -137,7 +148,7 @@ export default defineComponent({
     };
 
     const onConfigItemMouseMove = (e) => {
-      if (props.mode !== "edit") {
+      if (props.mode !== "edit" || props.layout === "block") {
         return;
       }
       if (!mouseState.value.dragging) {
@@ -250,9 +261,14 @@ export default defineComponent({
     const getConfigWrapperStyle = (style) => {
       // 只关心组件一些逻辑样式，不需要业务样式
       const { top, left, zIndex } = style;
+      if (props.layout === "position") {
+        return {
+          top,
+          left,
+          zIndex,
+        };
+      }
       return {
-        top,
-        left,
         zIndex,
       };
     };
@@ -288,6 +304,7 @@ export default defineComponent({
       mouseState,
       configIndex,
       onKeyDown,
+      setConfigIndex,
       getConfigWrapperStyle,
       getConfigWrapperInnerStyle,
       setEleAttribute,
@@ -329,6 +346,11 @@ export default defineComponent({
   left: 0;
   top: 0;
   box-sizing: border-box;
+
+  &.isBlock {
+    position: relative;
+  }
+
   .config-item-mask {
     position: absolute;
     inset: 0;

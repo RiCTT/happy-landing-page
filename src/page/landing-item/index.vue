@@ -6,7 +6,7 @@
         <a-button @click="goBackToList">返回列表</a-button>
         <a-button type="primary" @click="goToPreview">预览页面</a-button>
       </div>
-      <PreviewWrapper ref="prefviewWrp" />
+      <PreviewWrapper ref="prefviewWrp" :layout="pageStore.settings.layout" />
     </div>
     <PropsForm
       @data-change="handleDataChange"
@@ -54,6 +54,9 @@ export default defineComponent({
           pageStore.setSettings(originSettings || { pageHeight: "100%" });
         }
       });
+    } else {
+      pageStore.setConfigList([]);
+      pageStore.setSettings({ pageHeight: "100%" });
     }
 
     const prefviewWrp = ref();
@@ -67,8 +70,15 @@ export default defineComponent({
       if (pageId.value) {
         page.id = pageId.value;
       }
-      action(page).then(() => {
+      action(page).then((res: any) => {
         message.info("保存成功");
+        if (res && res._id) {
+          setTimeout(() => {
+            let baseHref = window.location.href;
+            baseHref += `?id=${res._id}`;
+            window.location.replace(baseHref);
+          }, 300);
+        }
       });
     };
 
