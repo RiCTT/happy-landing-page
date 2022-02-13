@@ -110,9 +110,6 @@ export default defineComponent({
       const id = Date.now();
       const { name } = comp;
       const result = { id, ...comp };
-      if (!result.style) {
-        result.style = {};
-      }
       if (!result.data) {
         result.data = {};
       }
@@ -120,13 +117,11 @@ export default defineComponent({
         result.data.text = "按钮";
       }
       if (name === "van-swipe-v2") {
-        result.style.height = "200px";
+        result.data.height = "200px";
       }
-      result.style.left = "0";
-      // result.style.top = "50%";
-      result.style.top = "0";
-      // result.style.transform = "translateY(-50%)";
-      result.style.zIndex = pageStore.configList.length + 11;
+      result.data.left = "0";
+      result.data.top = "0";
+      result.data.zIndex = pageStore.configList.length + 11;
       return result;
     };
 

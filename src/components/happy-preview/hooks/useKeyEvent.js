@@ -8,7 +8,7 @@ export const useKeyEvent = ({ configIndex, configList, mode, layout }) => {
       return;
     }
     const current = configList.value[index];
-    const style = current.style;
+    const style = current.data;
     const key = e.key;
     const moveStep = 1;
 

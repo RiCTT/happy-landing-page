@@ -23,6 +23,24 @@ export const BasicComponents = [
           return Promise.resolve();
         },
       },
+      width: {
+        type: "string",
+        label: "宽度",
+        ui: "text",
+        default: "100%",
+      },
+      backgroundColor: {
+        type: "string",
+        label: "背景颜色",
+        ui: "text",
+        default: "#000",
+      },
+      color: {
+        type: "string",
+        label: "字体颜色",
+        ui: "text",
+        default: "#fff",
+      },
     },
   },
   {

@@ -117,7 +117,8 @@ export const useMouse = ({ props, ctx, configIndex }) => {
         top: `${y}px`,
         zIndex: data.zIndex || 10 + i,
       };
-      data.style = Object.assign(data.style || {}, style);
+      // data.style = Object.assign(data.style || {}, style);
+      data.data = Object.assign(data.data || {}, style);
     }
     return list;
   };

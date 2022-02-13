@@ -16,14 +16,14 @@
         :class="{ active: configIndex === i, isBlock: layout === 'block' }"
         v-for="(item, i) in configList"
         :key="item.id"
-        :style="getConfigWrapperStyle(item.style)"
+        :style="getConfigWrapperStyle(item.data)"
         @click.stop="onConfigItemClick(item, i, $event)"
       >
         <component
           :is="item.name"
           :width="wrapperWidth"
           height="100%"
-          :style="getConfigWrapperInnerStyle(item.style)"
+          :style="getConfigWrapperInnerStyle(item.data)"
           v-bind="item.data"
         />
         <div
@@ -139,8 +139,8 @@ export default defineComponent({
       for (let i = 0; i < list.length; i++) {
         const data: any = list[i];
         const currentEle = eleList[i];
-        if (data.style) {
-          const { left, top } = data.style;
+        if (data.data) {
+          const { left, top } = data.data;
           if (left) {
             currentEle.setAttribute(OFFSET_X_KEY, parseInt(left) + "");
           }
@@ -173,7 +173,7 @@ export default defineComponent({
       let result = pureStyle;
       // 因为容器定位的样式跟业务样式绑定在一块，所以这里要剔除掉
       delete pureStyle.top;
-      delete pureStyle.width;
+      // delete pureStyle.width;
       delete pureStyle.left;
       delete pureStyle.zIndex;
       if (props.mode === "edit") {

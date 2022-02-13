@@ -35,7 +35,7 @@ export const useResizeSquare = ({ props, ctx, configIndex }) => {
     const absY = Math.abs(clientY - startY);
     const index = configIndex.value;
     const current = props.configList[index];
-    const style = current.style;
+    const style = current.data;
     console.log(
       parseInt(state.originWidth || "100%") -
         Number((absX / percentWidth).toFixed(2)) +
