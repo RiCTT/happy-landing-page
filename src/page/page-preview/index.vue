@@ -1,6 +1,7 @@
 <template>
   <div class="preview-wrapper">
-    <div class="preview-inner" :style="{ height: settings.pageHeight }">
+    <!-- <div class="preview-inner" :style="{ height: settings.pageHeight }"> -->
+    <div class="preview-inner">
       <HappyPreview
         :configList="configList"
         mode="show"
