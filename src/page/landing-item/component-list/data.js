@@ -32,14 +32,26 @@ export const BasicComponents = [
       backgroundColor: {
         type: "string",
         label: "背景颜色",
-        ui: "text",
-        default: "#000",
+        ui: "colorPicker",
+        default: "#000000",
       },
       color: {
         type: "string",
         label: "字体颜色",
+        ui: "colorPicker",
+        default: "#ffffff",
+      },
+      borderColor: {
+        type: "string",
+        label: "边框颜色",
+        ui: "colorPicker",
+        default: "#000000",
+      },
+      borderRadius: {
+        type: "string",
         ui: "text",
-        default: "#fff",
+        label: "圆角",
+        default: "16px",
       },
     },
   },
@@ -196,6 +208,31 @@ export const BasicComponents = [
             options: ["男", "女", "未知"],
           },
         ],
+      },
+    },
+  },
+  {
+    name: "van-sticky-v2",
+    label: "置底按钮",
+    iconSrc: require("./images/divider.png"),
+  },
+  {
+    name: "van-notice-bar-v2",
+    label: "通知栏",
+    iconSrc: require("./images/divider.png"),
+    props: {
+      text: {
+        label: "文本",
+        type: "string",
+        ui: "text",
+        default:
+          "无论我们能活多久，我们能够享受的只有无法分割的此刻，此外别无其他。",
+      },
+      leftIcon: {
+        label: "左侧图标",
+        type: "string",
+        ui: "text",
+        default: "volume-o",
       },
     },
   },

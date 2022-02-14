@@ -84,6 +84,12 @@
                 </div>
               </div>
             </template>
+            <input
+              v-if="val.ui === 'colorPicker'"
+              type="color"
+              v-model="model[key]"
+              :key="key"
+            />
             <a-input v-if="val.ui === 'text'" v-model:value="model[key]" />
             <a-switch v-if="val.ui === 'switch'" v-model:checked="model[key]" />
             <!-- <p v-if="!val.ui && !val.customAddAndSubtract">

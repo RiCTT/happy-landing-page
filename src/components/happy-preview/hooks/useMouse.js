@@ -123,6 +123,7 @@ export const useMouse = ({ props, ctx, configIndex }) => {
     return list;
   };
   return {
+    getConfigList,
     onConfigItemMouseDown,
     onConfigItemMouseMove,
     onConfigItemMouseUp,

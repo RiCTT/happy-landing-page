@@ -108,6 +108,7 @@ export default defineComponent({
       onConfigItemMouseDown,
       onConfigItemMouseMove,
       onConfigItemMouseUp,
+      getConfigList,
     } = useMouse({ props, ctx, configIndex });
 
     onMounted(() => {
@@ -153,7 +154,7 @@ export default defineComponent({
 
     const getConfigWrapperStyle = (style) => {
       // 只关心组件一些逻辑样式，不需要业务样式
-      const { top, left, zIndex, width } = style;
+      const { top, left, zIndex } = style;
       if (props.layout === "position") {
         return {
           top,
@@ -162,7 +163,6 @@ export default defineComponent({
         };
       }
       return {
-        width,
         zIndex,
       };
     };
@@ -202,6 +202,7 @@ export default defineComponent({
       maskSquareMove,
       maskSquareUp,
       setConfigIndex,
+      getConfigList,
       getConfigWrapperStyle,
       getConfigWrapperInnerStyle,
       setEleAttribute,
