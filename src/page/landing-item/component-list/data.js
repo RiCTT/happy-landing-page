@@ -114,7 +114,7 @@ export const BasicComponents = [
       src: {
         type: "string",
         label: "图片链接",
-        ui: "text",
+        ui: "upload",
         required: true,
       },
       href: {

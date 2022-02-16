@@ -92,6 +92,7 @@
             />
             <a-input v-if="val.ui === 'text'" v-model:value="model[key]" />
             <a-switch v-if="val.ui === 'switch'" v-model:checked="model[key]" />
+            <HappyUpload v-if="val.ui === 'upload'" v-model="model[key]" />
             <!-- <p v-if="!val.ui && !val.customAddAndSubtract">
               {{ val }}
             </p> -->
@@ -126,6 +127,7 @@ import {
   EditFilled,
 } from "@ant-design/icons-vue";
 import { usePageStore } from "@/store/page";
+import HappyUpload from "@/components/happy-upload/index.vue";
 
 export default defineComponent({
   components: {
@@ -134,6 +136,7 @@ export default defineComponent({
     MinusCircleFilled,
     ArrowUpOutlined,
     EditFilled,
+    HappyUpload,
   },
   props: {},
   setup(props, ctx) {
