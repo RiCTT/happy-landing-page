@@ -11,13 +11,18 @@
         />
       </template>
     </a-input>
+    <a-button type="primary" style="margin: 10px 0" @click="listVisible = true">
+      图片列表
+    </a-button>
   </a-spin>
+  <ImgList v-model="listVisible" @on-select="onSelectImage" />
 </template>
 
 <script lang="ts">
 import { defineComponent, ref, watch } from "vue";
 import axios from "axios";
 import { message } from "ant-design-vue";
+import ImgList from "./img-list.vue";
 import { getUploadToken } from "@/api/file";
 import { fileHost, uploadHost } from "@/config";
 
@@ -30,6 +35,9 @@ import { fileHost, uploadHost } from "@/config";
 
 let inputEl: HTMLElement;
 export default defineComponent({
+  components: {
+    ImgList,
+  },
   props: {
     modelValue: {
       type: String,
@@ -38,6 +46,8 @@ export default defineComponent({
   setup(props, ctx) {
     const src = ref(props.modelValue);
     const spinning = ref(false);
+    const listVisible = ref(false);
+    const fileList = ref([]);
 
     watch(
       () => props.modelValue,
@@ -91,11 +101,18 @@ export default defineComponent({
       });
     };
 
+    const onSelectImage = (val) => {
+      src.value = val;
+    };
+
     return {
       src,
       spinning,
+      fileList,
+      listVisible,
       onClickuploadFile,
       onUploadChange,
+      onSelectImage,
     };
   },
 });
