@@ -45,9 +45,8 @@ export default defineComponent({
     });
 
     onUnmounted(() => {
-      console.log("on unmount");
-      console.log(state.editor);
-      // state.editor && state.editor.destroy();
+      const editor = window.tinymce.get("editor");
+      editor.destroy();
     });
 
     const setContent = (val) => {
