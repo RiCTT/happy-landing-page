@@ -3,6 +3,9 @@ module.exports = {
   env: {
     node: true,
   },
+  globals: {
+    tinymce: true
+  },
   extends: [
     "plugin:vue/vue3-essential",
     "eslint:recommended",
@@ -19,11 +22,13 @@ module.exports = {
     "@typescript-eslint/explicit-module-boundary-types": "off",
     "@typescript-eslint/no-empty-function": "off",
     "@typescript-eslint/no-explicit-any": "off",
+    "@typescript-eslint/ban-types": "off",
+    "vue/no-unused-components": "warn",
     "no-undef": "warn",
     // 传递给prettier的选项
     // https://github.com/prettier/eslint-plugin-prettier#options
     "prettier/prettier": ["warn", {
       "htmlWhitespaceSensitivity": "ignore"
-    }]
+    }],
   },
 };

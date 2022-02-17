@@ -17,3 +17,9 @@ app.use(vant);
 app.use(Antd);
 app.use(pinia);
 app.use(registerMobileComponents);
+declare global {
+  interface Window {
+    tinymce: any;
+    FB: any;
+  }
+}

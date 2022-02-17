@@ -236,6 +236,19 @@ export const BasicComponents = [
       },
     },
   },
+  {
+    name: "custom-rich-text",
+    label: "富文本",
+    iconSrc: require("./images/form.png"),
+    props: {
+      content: {
+        label: "内容",
+        type: "string",
+        ui: "richtext",
+        default: "<div><h3>富文本框</h3><p>富文本内容</p></div>",
+      },
+    },
+  },
 ].map((e) => {
   const obj = e;
   const data = {};

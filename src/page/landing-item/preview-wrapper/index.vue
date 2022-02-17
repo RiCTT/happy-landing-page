@@ -186,7 +186,9 @@ export default defineComponent({
     height: 100%;
     border: 2px solid #f2f2f2;
     box-sizing: border-box;
-    overflow: auto;
+    // overflow: auto;
+    overflow-x: hidden;
+    overflow-y: auto;
     &::-webkit-scrollbar {
       width: 0;
     }

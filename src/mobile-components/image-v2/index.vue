@@ -1,5 +1,5 @@
 <template>
-  <van-image v-bind="$attrs" @click="onClick" />
+  <van-image class="van-image-v2" v-bind="$attrs" @click="onClick" />
 </template>
 
 <script lang="ts">
@@ -31,4 +31,8 @@ export default defineComponent({
 });
 </script>
 
-<style lang="stylus" scoped></style>
+<style lang="stylus" scoped>
+.van-image-v2 {
+  display: block;
+}
+</style>

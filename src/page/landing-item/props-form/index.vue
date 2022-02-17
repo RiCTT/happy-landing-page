@@ -93,6 +93,11 @@
             <a-input v-if="val.ui === 'text'" v-model:value="model[key]" />
             <a-switch v-if="val.ui === 'switch'" v-model:checked="model[key]" />
             <HappyUpload v-if="val.ui === 'upload'" v-model="model[key]" />
+            <HappyRichText
+              v-if="val.ui === 'richtext'"
+              v-model="model[key]"
+              :key="key"
+            />
             <!-- <p v-if="!val.ui && !val.customAddAndSubtract">
               {{ val }}
             </p> -->
@@ -128,6 +133,7 @@ import {
 } from "@ant-design/icons-vue";
 import { usePageStore } from "@/store/page";
 import HappyUpload from "@/components/happy-upload/index.vue";
+import HappyRichText from "@/components/happy-rich-text/index.vue";
 
 export default defineComponent({
   components: {
@@ -137,6 +143,7 @@ export default defineComponent({
     ArrowUpOutlined,
     EditFilled,
     HappyUpload,
+    HappyRichText,
   },
   props: {},
   setup(props, ctx) {

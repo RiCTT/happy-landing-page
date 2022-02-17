@@ -225,14 +225,14 @@ export default defineComponent({
 .happy-preview-wrapper {
   position: relative;
   width: 100%;
-  min-height: 100%;
-  overflow: hidden;
+  // min-height: 100%;
+  // overflow: hidden;
 
   .config-list-wrapper {
     width: 100%;
     height: 100%;
     outline: none;
-    overflow: hidden;
+    // overflow: hidden;
   }
 }
 
