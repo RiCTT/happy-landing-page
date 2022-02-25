@@ -24,7 +24,7 @@ module.exports = {
     "@typescript-eslint/no-explicit-any": "off",
     "@typescript-eslint/ban-types": "off",
     "vue/no-unused-components": "warn",
-    "no-undef": "warn",
+    "no-undef": "off",
     // 传递给prettier的选项
     // https://github.com/prettier/eslint-plugin-prettier#options
     "prettier/prettier": ["warn", {

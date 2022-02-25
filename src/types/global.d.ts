@@ -1,5 +1,4 @@
-declare global {
-  interface Window {
-    tinymce: any;
-  }
+interface Window {
+  tinymce: any;
+  FB: any;
 }

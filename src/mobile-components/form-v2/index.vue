@@ -114,7 +114,6 @@ export default defineComponent({
 
     const getFieldRules = (field) => {
       const { required, validator } = field;
-      // eslint-disable-next-line no-undef
       const rules: Array<RulesItem> = [];
       if (required) {
         rules.push({ required: true, message: "不能为空" });
