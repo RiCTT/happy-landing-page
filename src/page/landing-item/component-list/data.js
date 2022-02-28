@@ -1,3 +1,50 @@
+export const getBasicStyleProps = (keys) => {
+  let data = {
+    width: {
+      type: "string",
+      label: "宽度",
+      ui: "text",
+      default: "100%",
+    },
+    backgroundColor: {
+      type: "string",
+      label: "背景颜色",
+      ui: "colorPicker",
+      default: "#000000",
+    },
+    color: {
+      type: "string",
+      label: "字体颜色",
+      ui: "colorPicker",
+      default: "#000",
+    },
+    borderColor: {
+      type: "string",
+      label: "边框颜色",
+      ui: "colorPicker",
+      default: "#000000",
+    },
+    borderRadius: {
+      type: "string",
+      ui: "text",
+      label: "圆角",
+      default: "16px",
+    },
+  };
+
+  let result = {};
+
+  if (keys) {
+    keys.forEach((key) => {
+      result[key] = data[key];
+    });
+  } else {
+    result = { ...data };
+  }
+
+  return result;
+};
+
 export const BasicComponents = [
   {
     name: "van-button-v2",
@@ -23,36 +70,21 @@ export const BasicComponents = [
           return Promise.resolve();
         },
       },
-      width: {
+      ...getBasicStyleProps(),
+    },
+  },
+  {
+    name: "simple-text",
+    label: "普通文本",
+    iconSrc: require("./images/button.png"),
+    props: {
+      text: {
         type: "string",
-        label: "宽度",
+        label: "文本内容",
         ui: "text",
-        default: "100%",
+        default: "普通文本",
       },
-      backgroundColor: {
-        type: "string",
-        label: "背景颜色",
-        ui: "colorPicker",
-        default: "#000000",
-      },
-      color: {
-        type: "string",
-        label: "字体颜色",
-        ui: "colorPicker",
-        default: "#ffffff",
-      },
-      borderColor: {
-        type: "string",
-        label: "边框颜色",
-        ui: "colorPicker",
-        default: "#000000",
-      },
-      borderRadius: {
-        type: "string",
-        ui: "text",
-        label: "圆角",
-        default: "16px",
-      },
+      ...getBasicStyleProps(["width", "color"]),
     },
   },
   {
