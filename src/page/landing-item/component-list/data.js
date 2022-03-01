@@ -10,13 +10,13 @@ export const getBasicStyleProps = (keys) => {
       type: "string",
       label: "背景颜色",
       ui: "colorPicker",
-      default: "#000000",
+      default: "",
     },
     color: {
       type: "string",
       label: "字体颜色",
       ui: "colorPicker",
-      default: "#000",
+      default: "",
     },
     borderColor: {
       type: "string",
@@ -29,6 +29,12 @@ export const getBasicStyleProps = (keys) => {
       ui: "text",
       label: "圆角",
       default: "16px",
+    },
+    padding: {
+      type: "string",
+      label: "组件间距",
+      ui: "padding-box",
+      default: "0",
     },
   };
 
@@ -84,7 +90,7 @@ export const BasicComponents = [
         ui: "text",
         default: "普通文本",
       },
-      ...getBasicStyleProps(["width", "color"]),
+      ...getBasicStyleProps(["width", "backgroundColor", "color", "padding"]),
     },
   },
   {

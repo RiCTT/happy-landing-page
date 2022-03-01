@@ -1,8 +1,7 @@
 <template>
-  <div ref="wrapper" class="happy-preview-wrapper">
+  <div ref="wrapper" class="happy-preview-wrapper" :style="boxStyle">
     <div
       class="config-list-wrapper"
-      :style="{ height: boxHeight }"
       tabindex="1"
       @keydown="onKeyDown"
       @mousedown.stop="onConfigItemMouseDown"
@@ -48,18 +47,6 @@ import { defineComponent, onMounted, ref, onUpdated, computed } from "vue";
 import { useKeyEvent } from "./hooks/useKeyEvent";
 import { useResizeSquare } from "./hooks/useResizeSquare";
 import { useMouse } from "./hooks/useMouse";
-const createMeta = () => {
-  const meta = document.createElement("meta");
-  meta.setAttribute("name", "viewport");
-  meta.setAttribute(
-    "content",
-    "maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"
-  );
-
-  document.querySelector("head")?.appendChild(meta);
-};
-
-createMeta();
 
 const OFFSET_X_KEY = "offsetX";
 const OFFSET_Y_KEY = "offsetY";
@@ -70,9 +57,9 @@ export default defineComponent({
       type: Array,
       default: () => [],
     },
-    boxHeight: {
-      type: [String, Number],
-      default: "100%",
+    settings: {
+      type: Object,
+      default: () => {},
     },
     mode: {
       type: String,
@@ -90,6 +77,14 @@ export default defineComponent({
     const wrapperWidth = ref();
     const maskStyle = ref({});
     const configIndex = ref(-1);
+
+    const boxStyle = computed(() => {
+      const settings = props.settings;
+      const { backgroundColor } = settings;
+      return {
+        backgroundColor,
+      };
+    });
 
     const { maskSquareDown, maskSquareMove, maskSquareUp } = useResizeSquare({
       props,
@@ -197,6 +192,7 @@ export default defineComponent({
       wrapperWidth,
       maskStyle,
       configIndex,
+      boxStyle,
       onKeyDown,
       maskSquareDown,
       maskSquareMove,
@@ -225,7 +221,7 @@ export default defineComponent({
 .happy-preview-wrapper {
   position: relative;
   width: 100%;
-  // min-height: 100%;
+  min-height: 100%;
   // overflow: hidden;
 
   .config-list-wrapper {

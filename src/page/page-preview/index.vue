@@ -4,6 +4,7 @@
     <div class="preview-inner">
       <HappyPreview
         :configList="configList"
+        :settings="settings"
         mode="show"
         :layout="settings.layout || 'block'"
       />

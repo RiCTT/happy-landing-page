@@ -4,7 +4,7 @@
       <HappyPreview
         ref="previewWrp"
         :configList="pageStore.configList"
-        :boxHeight="pageStore.settings.pageHeight"
+        :settings="pageStore.settings"
         :layout="$attrs.layout"
         @config-select="handleConfigSelect"
         @config-change="handleConfigChange"

@@ -17,11 +17,11 @@
       <a-form-item label="页面标题" name="title">
         <a-input v-model:value="model.title" />
       </a-form-item>
-      <a-form-item label="页面高度" name="pageHeight">
+      <!-- <a-form-item label="页面高度" name="pageHeight">
         <a-input v-model:value="model.pageHeight" suffix="px" />
-      </a-form-item>
+      </a-form-item> -->
       <a-form-item label="页面背景颜色" name="backgroundColor">
-        <a-input v-model:value="model.backgroundColor" />
+        <input type="color" v-model="model.backgroundColor" />
       </a-form-item>
       <a-form-item>
         <a-button type="primary" html-type="submit">保存</a-button>

@@ -84,14 +84,22 @@
                 </div>
               </div>
             </template>
-            <input
+            <a-input v-if="val.ui === 'text'" v-model:value="model[key]" />
+            <a-switch v-if="val.ui === 'switch'" v-model:checked="model[key]" />
+            <!-- <input
               v-if="val.ui === 'colorPicker'"
               type="color"
               v-model="model[key]"
               :key="key"
+            /> -->
+            <HappyColorPicker
+              v-if="val.ui === 'colorPicker'"
+              v-model="model[key]"
             />
-            <a-input v-if="val.ui === 'text'" v-model:value="model[key]" />
-            <a-switch v-if="val.ui === 'switch'" v-model:checked="model[key]" />
+            <HappyPaddingBox
+              v-if="val.ui === 'padding-box'"
+              v-model="model[key]"
+            />
             <HappyUpload v-if="val.ui === 'upload'" v-model="model[key]" />
             <HappyRichText
               v-if="val.ui === 'richtext'"
@@ -134,6 +142,8 @@ import {
 import { usePageStore } from "@/store/page";
 import HappyUpload from "@/components/happy-upload/index.vue";
 import HappyRichText from "@/components/happy-rich-text/index.vue";
+import HappyPaddingBox from "@/components/happy-padding-box/index.vue";
+import HappyColorPicker from "@/components/happy-color-picker/index.vue";
 
 export default defineComponent({
   components: {
@@ -144,6 +154,8 @@ export default defineComponent({
     EditFilled,
     HappyUpload,
     HappyRichText,
+    HappyPaddingBox,
+    HappyColorPicker,
   },
   props: {},
   setup(props, ctx) {
