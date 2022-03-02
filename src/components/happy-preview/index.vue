@@ -80,9 +80,14 @@ export default defineComponent({
 
     const boxStyle = computed(() => {
       const settings = props.settings;
-      const { backgroundColor } = settings;
+      const { backgroundColor, backgroundImage } = settings;
+      console.log("settings");
+      console.log(JSON.stringify(settings));
       return {
         backgroundColor,
+        backgroundImage: `url(${backgroundImage})`,
+        backgroundRepeat: `no-repeat`,
+        backgroundSize: `100% auto`,
       };
     });
 
@@ -173,6 +178,15 @@ export default defineComponent({
       delete pureStyle.zIndex;
       if (props.mode === "edit") {
         result = Object.assign(base, pureStyle);
+      }
+      if (result.fontSize) {
+        result.fontSize = result.fontSize + "px";
+      }
+      if (result.borderRadius) {
+        result.borderRadius = result.borderRadius + "px";
+      }
+      if (result.width) {
+        result.width = result.width + "%";
       }
       return result;
     };

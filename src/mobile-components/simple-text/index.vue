@@ -19,5 +19,7 @@ export default defineComponent({
 <style lang="stylus" scoped>
 .simple-text {
   color: #000;
+  margin: 0;
+  font-size: 14px;
 }
 </style>

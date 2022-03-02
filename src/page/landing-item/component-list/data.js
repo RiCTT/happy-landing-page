@@ -1,57 +1,7 @@
-export const getBasicStyleProps = (keys) => {
-  let data = {
-    width: {
-      type: "string",
-      label: "宽度",
-      ui: "text",
-      default: "100%",
-    },
-    backgroundColor: {
-      type: "string",
-      label: "背景颜色",
-      ui: "colorPicker",
-      default: "",
-    },
-    color: {
-      type: "string",
-      label: "字体颜色",
-      ui: "colorPicker",
-      default: "",
-    },
-    borderColor: {
-      type: "string",
-      label: "边框颜色",
-      ui: "colorPicker",
-      default: "#000000",
-    },
-    borderRadius: {
-      type: "string",
-      ui: "text",
-      label: "圆角",
-      default: "16px",
-    },
-    padding: {
-      type: "string",
-      label: "组件间距",
-      ui: "padding-box",
-      default: "0",
-    },
-  };
-
-  let result = {};
-
-  if (keys) {
-    keys.forEach((key) => {
-      result[key] = data[key];
-    });
-  } else {
-    result = { ...data };
-  }
-
-  return result;
-};
+import { getBasicStyleProps } from "./common";
 
 export const BasicComponents = [
+  // 按钮组件
   {
     name: "van-button-v2",
     label: "按钮",
@@ -79,6 +29,7 @@ export const BasicComponents = [
       ...getBasicStyleProps(),
     },
   },
+  // 普通文本
   {
     name: "simple-text",
     label: "普通文本",
@@ -90,9 +41,10 @@ export const BasicComponents = [
         ui: "text",
         default: "普通文本",
       },
-      ...getBasicStyleProps(["width", "backgroundColor", "color", "padding"]),
+      ...getBasicStyleProps(),
     },
   },
+  // 轮播
   {
     name: "van-swipe-v2",
     label: "轮播",
@@ -144,6 +96,7 @@ export const BasicComponents = [
       },
     },
   },
+  // 图片
   {
     name: "van-image-v2",
     label: "图片",
@@ -154,24 +107,29 @@ export const BasicComponents = [
         label: "图片链接",
         ui: "upload",
         required: true,
+        default: "http://h5-cooking.club/FjfRErzIAn2T-sAVF-V-R44tIp0t",
       },
       href: {
         type: "string",
         label: "跳转链接",
         ui: "text",
       },
+      ...getBasicStyleProps(["padding"]),
     },
   },
+  // 倒计时
   {
     name: "van-count-down-v2",
     label: "倒计时",
     iconSrc: require("./images/countdown.png"),
   },
+  // 分割线
   {
     name: "van-divider-v2",
     label: "分割线",
     iconSrc: require("./images/divider.png"),
   },
+  // 表单
   {
     name: "van-form-v2",
     label: "表单",

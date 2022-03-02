@@ -49,10 +49,10 @@ export default defineComponent({
       () => props.modelValue,
       (val) => {
         const paddings = val.split(" ");
-        state.top = parseInt(paddings[0]);
-        state.right = parseInt(paddings[1]);
-        state.bottom = parseInt(paddings[2]);
-        state.left = parseInt(paddings[3]);
+        state.top = parseInt(paddings[0]) || 0;
+        state.right = parseInt(paddings[1]) || 0;
+        state.bottom = parseInt(paddings[2]) || 0;
+        state.left = parseInt(paddings[3]) || 0;
       },
       {
         immediate: true,
@@ -61,7 +61,7 @@ export default defineComponent({
 
     const onInputChange = () => {
       const { top, left, right, bottom } = state;
-      const result = `${top}px ${right}px ${bottom}px ${left}px`;
+      const result = `${top}px ${right || 0}px ${bottom || 0}px ${left || 0}px`;
       ctx.emit("update:modelValue", result);
     };
 

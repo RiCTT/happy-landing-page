@@ -20,8 +20,11 @@
       <!-- <a-form-item label="页面高度" name="pageHeight">
         <a-input v-model:value="model.pageHeight" suffix="px" />
       </a-form-item> -->
-      <a-form-item label="页面背景颜色" name="backgroundColor">
+      <a-form-item label="背景颜色" name="backgroundColor">
         <input type="color" v-model="model.backgroundColor" />
+      </a-form-item>
+      <a-form-item label="背景图片" name="backgroundImage">
+        <HappyUpload v-model="model.backgroundImage" />
       </a-form-item>
       <a-form-item>
         <a-button type="primary" html-type="submit">保存</a-button>
@@ -33,8 +36,12 @@
 <script lang="ts">
 import { defineComponent, ref, watch } from "vue";
 import { usePageStore } from "@/store/page";
+import HappyUpload from "@/components/happy-upload/index.vue";
 
 export default defineComponent({
+  components: {
+    HappyUpload,
+  },
   setup(props, ctx) {
     const pageStore = usePageStore();
     const model = ref({});

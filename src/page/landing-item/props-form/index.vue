@@ -84,7 +84,11 @@
                 </div>
               </div>
             </template>
-            <a-input v-if="val.ui === 'text'" v-model:value="model[key]" />
+            <a-input
+              v-if="val.ui === 'text'"
+              v-model:value="model[key]"
+              :addon-after="val.unit"
+            />
             <a-switch v-if="val.ui === 'switch'" v-model:checked="model[key]" />
             <!-- <input
               v-if="val.ui === 'colorPicker'"
@@ -92,6 +96,19 @@
               v-model="model[key]"
               :key="key"
             /> -->
+            <a-select
+              v-if="val.ui === 'select'"
+              v-model:value="model[key]"
+              style="width: 120px"
+            >
+              <a-select-option
+                v-for="op in val.options"
+                :value="op.value"
+                :key="op.value"
+              >
+                {{ op.label }}
+              </a-select-option>
+            </a-select>
             <HappyColorPicker
               v-if="val.ui === 'colorPicker'"
               v-model="model[key]"

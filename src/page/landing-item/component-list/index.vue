@@ -24,6 +24,7 @@
 <script lang="ts">
 import { defineComponent, ref } from "vue";
 import { BasicComponents } from "./data.js";
+
 export default defineComponent({
   components: {},
   setup(props, ctx) {
