@@ -13,12 +13,12 @@ export default {
         <div class="layout-icon">
           <reddit-outlined />
         </div>
-        <div class="layout-title">H5制作</div>
+        <div class="layout-title">Happy H5制作</div>
         <div class="layout-user">
           <span>
             <user-outlined style={{ fontSize: "20px" }} />
           </span>
-          <span class="layout-user-info">test(173040121319)</span>
+          <span class="layout-user-info">Admin</span>
         </div>
       </div>
     );
