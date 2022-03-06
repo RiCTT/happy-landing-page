@@ -46,9 +46,7 @@ export default defineComponent({
       getPageItem({
         id: pageId.value,
       }).then((res: any) => {
-        console.log(res);
         if (res) {
-          console.log("find item !");
           const { configList: result, settings: originSettings } = res;
           pageStore.setConfigList(result);
           pageStore.setSettings(originSettings || { pageHeight: "100%" });
@@ -86,8 +84,6 @@ export default defineComponent({
     const handleDataChange = (data) => {
       // const index = prefviewWrp.value.getCurrentIndex();
       const index = pageStore.selectIndex;
-      console.log("data change !!!");
-      console.log(index);
       if (index !== -1) {
         const currentComp: any = pageStore.configList[index];
         const oldData = currentComp.data;
@@ -98,7 +94,6 @@ export default defineComponent({
     };
 
     const handleAddComponent = (comp) => {
-      console.log(comp);
       let data = initComponentDefaultValue(comp);
       message.info("添加成功!");
       const list: any[] = pageStore.configList;
@@ -122,6 +117,7 @@ export default defineComponent({
       result.data.left = "0";
       result.data.top = "0";
       result.data.zIndex = pageStore.configList.length + 11;
+      // return JSON.parse(JSON.stringify(result));
       return result;
     };
 

@@ -21,7 +21,7 @@
         <a-input v-model:value="model.pageHeight" suffix="px" />
       </a-form-item> -->
       <a-form-item label="背景颜色" name="backgroundColor">
-        <input type="color" v-model="model.backgroundColor" />
+        <HappyColorPicker v-model="model.backgroundColor" />
       </a-form-item>
       <a-form-item label="背景图片" name="backgroundImage">
         <HappyUpload v-model="model.backgroundImage" />
@@ -37,10 +37,12 @@
 import { defineComponent, ref, watch } from "vue";
 import { usePageStore } from "@/store/page";
 import HappyUpload from "@/components/happy-upload/index.vue";
+import HappyColorPicker from "@/components/happy-color-picker/index.vue";
 
 export default defineComponent({
   components: {
     HappyUpload,
+    HappyColorPicker,
   },
   setup(props, ctx) {
     const pageStore = usePageStore();

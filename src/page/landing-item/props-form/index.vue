@@ -236,7 +236,6 @@ export default defineComponent({
     };
 
     const onFinish = (value) => {
-      console.log(value);
       ctx.emit("submit", value);
     };
 
@@ -262,7 +261,6 @@ export default defineComponent({
     };
 
     const handleFieldsModalFormSave = (data) => {
-      console.log("model");
       const fields = model.value.fields;
       const { id } = data;
       if (!id) {
@@ -275,7 +273,6 @@ export default defineComponent({
           model.value.fields.splice(index, 1, { ...fields[index], ...data });
         }
       }
-      console.log(model.value);
     };
 
     return {

@@ -30,8 +30,9 @@ export default defineComponent({
   setup(props, ctx) {
     const basicList = ref(BasicComponents);
     const onCompClick = (comp) => {
-      console.log(comp);
-      ctx.emit("add-component", comp);
+      // 传递需要拷贝一下，不然同一批次创建的组件会对象引用
+      const result = JSON.parse(JSON.stringify(comp));
+      ctx.emit("add-component", result);
     };
     return {
       basicList,
