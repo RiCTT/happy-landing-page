@@ -15,30 +15,33 @@
 ### 版本v0.3（进行中）
   - 新增/修复功能
   - 版本计划
-    - `feature: `实现事件总线，完成un、redo操作
-    - `feature: `考虑是否增加用户模块
-    - `feature: `增加二维码预览模式
-    - `feature: `将主系统拆成主、预览两个页面模式，减少预览的白屏时间，减少不必要的资源加载
-    - `fix: `解决体验过程中感觉不顺畅，可以优化的bug、问题等；
+    - `feature:`实现事件总线，完成un、redo操作
+    - `feature:`考虑是否增加用户模块
+    - `feature:`增加二维码预览模式
+    - `feature:`将主系统拆成主、预览两个页面模式，减少预览的白屏时间，减少不必要的资源加载
+    - `fix:`解决体验过程中感觉不顺畅，可以优化的bug、问题等；
 ### 版本v0.2
 
   - 新增/修复功能
-    - `feature: `块/定位布局模式
-    - `feature: `图片管理模块，上传，选择图片等
-    - `feature: `增加常用的组件，置顶、轮播、单行文本、多行文本、`富文本`等
-    - `fix: `编辑时，第一次渲染点击可能导致组件坐标错位
-    - `refactor/optimize: `统一数据流仓库
-    - `refactor/optimize: `基于Vant UI组件，进行二次封装，方便功能扩展，开发（减少更改数据库数据的次数）
-    - `feature: `提供设置宽高、边距的能力
+    - `feature:`块/定位布局模式
+    - `feature:`图片管理模块，上传，选择图片等
+    - `feature:`增加常用的组件，置顶、轮播、单行文本、多行文本、`富文本`等
+    - `fix:`编辑时，第一次渲染点击可能导致组件坐标错位
+    - `refactor/optimize:`统一数据流仓库
+    - `refactor/optimize:`基于Vant UI组件，进行二次封装，方便功能扩展，开发（减少更改数据库数据的次数）
+    - `feature:`提供设置宽高、边距的能力
 ### 版本v0.1
 
   - 新增/修复功能
-    - `feature: `配置页面的生成，预览
-    - `feature: `基本的交互，点击，跳转等
+    - `feature:`配置页面的生成，预览
+    - `feature:`基本的交互，点击，跳转等
 
 
-## 项目预览
+  - 
+## [项目预览](http://119.91.143.19/landing-list)
 
+  - 预览地址——http://119.91.143.19/landing-list
+  
 ![Alt text](./md-images/cover2.png "optional title")
 ![Alt text](./md-images/cover1.png "optional title")
 ![Alt text](./md-images/cover3.png "optional title")
