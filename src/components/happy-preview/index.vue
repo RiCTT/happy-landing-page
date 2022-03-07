@@ -236,18 +236,15 @@ export default defineComponent({
   position: relative;
   width: 100%;
   min-height: 100%;
-  // overflow: hidden;
 
   .config-list-wrapper {
     width: 100%;
     height: 100%;
     outline: none;
-    // overflow: hidden;
   }
 }
 
 .config-item {
-  // position: relative;
   position: absolute;
   width: 100%;
   left: 0;

@@ -1,6 +1,5 @@
 <template>
   <div class="preview-wrapper">
-    <!-- <div class="preview-inner" :style="{ height: settings.pageHeight }"> -->
     <div class="preview-inner">
       <HappyPreview
         :configList="configList"
@@ -14,9 +13,10 @@
 
 <script lang="ts">
 import HappyPreview from "@/components/happy-preview/index.vue";
-import { defineComponent, ref, computed } from "vue";
+import { defineComponent, ref } from "vue";
 import { getPageItem } from "@/api/landing-page";
-import { useRoute } from "vue-router";
+import { getUrlParamValue } from "@/utils/url";
+
 export default defineComponent({
   components: {
     HappyPreview,
@@ -24,11 +24,10 @@ export default defineComponent({
   setup() {
     const configList = ref([]);
     const settings = ref({});
-    const route = useRoute();
-    const pageId = computed(() => route.query.id);
-    if (pageId.value) {
-      console.log("get Page item");
-      getPageItem({ id: pageId.value }).then((res: any) => {
+    const pageId = getUrlParamValue("id");
+
+    if (pageId) {
+      getPageItem({ id: pageId }).then((res: any) => {
         console.log("page result");
         console.log(res);
         const { configList: result, settings: originSettings } = res;
@@ -43,6 +42,21 @@ export default defineComponent({
   },
 });
 </script>
+
+<style>
+body,
+html {
+  height: 100%;
+}
+#app {
+  height: 100%;
+  font-family: Avenir, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-align: center;
+  color: #2c3e50;
+}
+</style>
 
 <style lang="stylus" scoped>
 .preview-wrapper {

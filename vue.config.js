@@ -9,4 +9,9 @@ module.exports = {
       },
     },
   },
+
+  pages: {
+    index: "src/main.ts",
+    preview: "src/preview-main.ts",
+  },
 };

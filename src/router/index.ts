@@ -1,11 +1,9 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
-import Home from "../page/Home.vue";
 
 const routes: Array<RouteRecordRaw> = [
   {
     path: "/",
     name: "Home",
-    component: Home,
     redirect: "/landing-list",
   },
   {
@@ -18,11 +16,11 @@ const routes: Array<RouteRecordRaw> = [
     name: "LandingItem",
     component: () => import("@/page/landing-item/index.vue"),
   },
-  {
-    path: "/page-preview",
-    name: "PagePreview",
-    component: () => import("@/page/page-preview/index.vue"),
-  },
+  // {
+  //   path: "/page-preview",
+  //   name: "PagePreview",
+  //   component: () => import("@/page/page-preview/index.vue"),
+  // },
 ];
 
 const router = createRouter({

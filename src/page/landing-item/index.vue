@@ -133,7 +133,8 @@ export default defineComponent({
     };
 
     const goToPreview = () => {
-      const url = window.location.origin + `/page-preview?id=${pageId.value}`;
+      // const url = window.location.origin + `/page-preview?id=${pageId.value}`;
+      const url = window.location.origin + `/preview?id=${pageId.value}`;
       window.open(url, "_blank");
     };
 
