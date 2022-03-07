@@ -3,9 +3,6 @@ import PagePreview from "./page/page-preview/index.vue";
 import "@/style/reset.css";
 import vant from "vant";
 import "vant/lib/index.css";
-// ant-design-vue
-// import Antd from "ant-design-vue";
-// import "ant-design-vue/dist/antd.css";
 import { createPinia } from "pinia";
 import registerMobileComponents from "@/mobile-components/index";
 
