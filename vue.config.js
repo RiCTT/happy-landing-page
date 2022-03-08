@@ -17,12 +17,12 @@ module.exports = {
       entry: "src/main.ts",
       template: "public/index.html",
       // extracted common chunks and vendor chunks.
-      // chunks: ["chunk-vendors", "chunk-common", "index"],
+      chunks: ["chunk-vendors", "chunk-common", "chunk-ui-vendors", "index"],
     },
     preview: {
       entry: "src/preview-main.ts",
       template: "public/preview.html",
-      // chunks: ["chunk-preview-vendors", "chunk-common", "preview"],
+      chunks: ["chunk-vendors", "chunk-common", "preview"],
     },
   },
 
@@ -43,18 +43,18 @@ module.exports = {
           vendors: {
             name: "chunk-vendors",
             test: /[\\/]node_modules[\\/]/,
-            chunks: "initial",
-            priority: 2,
+            chunks: "all",
+            priority: 10,
             reuseExistingChunk: true,
             enforce: true,
           },
-          // previewVendors: {
-          //   name: "chunk-preview-vendors",
-          //   test: /[\\/]node_modules[\\/](vue|vant|pinia)[\\/]/,
-          //   chunks: "all",
-          //   priority: 10,
-          //   enforce: true,
-          // },
+          uiVendors: {
+            name: "chunk-ui-vendors",
+            test: /[\\/]node_modules[\\/](ant-design-vue)/,
+            chunks: "all",
+            priority: 11,
+            enforce: true,
+          },
         },
       },
     };
