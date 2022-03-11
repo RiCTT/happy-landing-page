@@ -5,6 +5,8 @@
       <div class="landing-item-operation">
         <a-button @click="goBackToList">返回列表</a-button>
         <a-button type="primary" @click="goToPreview">预览页面</a-button>
+        <a-button type="primary" @click="goBack">后退</a-button>
+        <a-button type="primary" @click="goForward">前进</a-button>
       </div>
       <PreviewWrapper ref="prefviewWrp" :layout="pageStore.settings.layout" />
     </div>
@@ -99,6 +101,7 @@ export default defineComponent({
       const list: any[] = pageStore.configList;
       list.push(data);
       pageStore.setConfigList(list);
+      console.log('run click')
     };
 
     const initComponentDefaultValue = (comp) => {
@@ -138,9 +141,27 @@ export default defineComponent({
       window.open(url, "_blank");
     };
 
+    const goBack = () => {
+      const data = pageStore.c.undo();
+      if (data) {
+        pageStore.setConfigListPure(data);
+      }
+      // pageStore.setConfigList(data);
+    };
+
+    const goForward = () => {
+      const data = pageStore.c.redo();
+      if (data) {
+        pageStore.setConfigListPure(data);
+      }
+      // pageStore.setConfigList(data);
+    };
+
     return {
       pageStore,
       prefviewWrp,
+      goBack,
+      goForward,
       goBackToList,
       goToPreview,
       handlePageFormSubmit,

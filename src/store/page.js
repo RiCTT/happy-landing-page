@@ -1,4 +1,5 @@
 import { defineStore } from "pinia";
+import Command from "@/utils/command";
 
 export const usePageStore = defineStore("page", {
   state: () => {
@@ -8,10 +9,16 @@ export const usePageStore = defineStore("page", {
       currentSelectProps: {},
       currentSelectPropsData: {},
       settings: { pageHeight: "100%" },
+      c: new Command(),
     };
   },
   actions: {
     setConfigList(data) {
+      this.configList = data;
+      console.log('excute')
+      this.c.execute(data);
+    },
+    setConfigListPure(data) {
       this.configList = data;
     },
     setSettings(data) {
@@ -28,9 +35,6 @@ export const usePageStore = defineStore("page", {
     },
     setSelectIndex(data) {
       this.selectIndex = data;
-    },
-    increment() {
-      this.count++;
     },
   },
 });

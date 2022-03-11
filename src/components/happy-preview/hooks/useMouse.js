@@ -97,8 +97,8 @@ export const useMouse = ({ props, ctx, configIndex }) => {
     mouseState.value.ele = null;
     console.log("drag end");
     // console.log(JSON.stringify(props.configList));
-    const list = getConfigList();
-    ctx.emit("config-change", list);
+    // const list = getConfigList();
+    // ctx.emit("config-change", list);
     return false;
   };
 

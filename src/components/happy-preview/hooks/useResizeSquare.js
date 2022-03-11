@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { reactive, onMounted } from "vue";
 
 export const useResizeSquare = ({ props, ctx, configIndex }) => {
